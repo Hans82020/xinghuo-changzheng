@@ -16,6 +16,7 @@
 
     // 行军事件抽取：seed 线性同余伪随机（seed=(seed*48271)%2147483647），按权重抽，minFaith 过滤
     pickEvent(st) {
+      if (!Number.isFinite(st.seed) || st.seed <= 0) st.seed = 1;   // 守卫：坏档 seed=NaN/非正数回退常数，防抽取退化
       st.seed = (st.seed * 48271) % 2147483647;
       const pool = XH.EVENTS.filter(ev => !ev.minFaith || st.faith >= ev.minFaith);
       let r = (st.seed / 2147483647) * pool.reduce((s, e) => s + e.weight, 0);

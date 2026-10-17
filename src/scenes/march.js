@@ -26,8 +26,10 @@
 
     const arrive = () => {
       arrived = true;
-      // n03（湘江）特殊编排：先弹强减员剧情卡，确认后再进入节点流程
-      if (node.id === 'n03') XH.Loop.push(XH.Overlay.story(node, () => XH.NodeFlow.start(st, node)));
+      // n03（湘江）特殊编排：先弹独立减员剧情卡（伪节点文案，与 NodeFlow.start 的节点剧情不重复），确认后再进入节点流程
+      if (node.id === 'n03') XH.Loop.push(XH.Overlay.story(
+        { name:'湘江减员', date:node.date, story:['湘江一战，八万六千余人锐减至三万余……'], emotion:{} },
+        () => XH.NodeFlow.start(st, node)));
       else XH.NodeFlow.start(st, node);
     };
 

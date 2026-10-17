@@ -1602,8 +1602,10 @@ canvas{image-rendering:pixelated;image-rendering:crisp-edges;touch-action:none}
 
     const arrive = () => {
       arrived = true;
-      // n03（湘江）特殊编排：先弹强减员剧情卡，确认后再进入节点流程
-      if (node.id === 'n03') XH.Loop.push(XH.Overlay.story(node, () => XH.NodeFlow.start(st, node)));
+      // n03（湘江）特殊编排：先弹独立减员剧情卡（伪节点文案，与 NodeFlow.start 的节点剧情不重复），确认后再进入节点流程
+      if (node.id === 'n03') XH.Loop.push(XH.Overlay.story(
+        { name:'湘江减员', date:node.date, story:['湘江一战，八万六千余人锐减至三万余……'], emotion:{} },
+        () => XH.NodeFlow.start(st, node)));
       else XH.NodeFlow.start(st, node);
     };
 
@@ -1671,6 +1673,7 @@ canvas{image-rendering:pixelated;image-rendering:crisp-edges;touch-action:none}
 
     // 行军事件抽取：seed 线性同余伪随机（seed=(seed*48271)%2147483647），按权重抽，minFaith 过滤
     pickEvent(st) {
+      if (!Number.isFinite(st.seed) || st.seed <= 0) st.seed = 1;   // 守卫：坏档 seed=NaN/非正数回退常数，防抽取退化
       st.seed = (st.seed * 48271) % 2147483647;
       const pool = XH.EVENTS.filter(ev => !ev.minFaith || st.faith >= ev.minFaith);
       let r = (st.seed / 2147483647) * pool.reduce((s, e) => s + e.weight, 0);

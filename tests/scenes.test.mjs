@@ -146,6 +146,25 @@ test('march：n03（湘江）到达先弹减员提示卡，确认后进入 n03 �
   assert.ok(Array.isArray(Loop.top().areas), '下一层应为 choice（有热区）');
 });
 
+test('march：resync——节点完成回 march 后一帧重同步，不重复进入上一节点流程', () => {
+  const { Scenes, State, NODES } = boot();
+  const Loop = xh().Loop;
+  const st = State.create(); st.nodeIndex = 0; State.beginNode(st, NODES[0]); st.seed = 7;
+  Loop.stack.length = 0;
+  const m = Scenes.march(st); Loop.push(m);
+  m.update(0.1);                                                  // march 已持有旧节点（idx=0）
+  st.nodeIndex = 1;                                               // 模拟节点流程完成：nodeIndex 已推进
+  m.update(0.1);                                                  // 重同步帧：enter 后本帧不前进、不压栈
+  assert.equal(Loop.top(), m, '重同步帧栈顶仍是 march');
+  assert.equal(Loop.stack.length, 1, '无 story/choice 压入（不重复进入上一节点流程）');
+  driveEvents(m, st, 2);                                          // 重同步后向新节点行军，途中事件照常
+  assert.ok(driveToStory(m, st), '抵达新节点应进入其节点流程 story');
+  Loop.top().onInput({ type: 'key', action: 'confirm' });         // 关 story → choice
+  Loop.top().draw(mockCtx);
+  assert.deepEqual(Loop.top().areas.map(a => a.option.label),
+    NODES[1].choice.options.map(o => o.label), '进入的是 NODES[1]（新节点）而非上一节点的流程');
+});
+
 test('nodeflow.start：story→choice→quiz→minigame 逐级推进，quiz 用 correct 热区作答', () => {
   const { NodeFlow, State, NODES } = boot();
   const Loop = xh().Loop;
@@ -276,6 +295,20 @@ test('DEBUG_LOCK：开启时 applyEffects 负值归零，关闭时正常应用',
   NodeFlow.applyEffects(st, { troops: -50, morale: -10 });
   assert.equal(st.troops, 50, '锁关闭后负值正常生效');
   assert.equal(st.morale, 40);
+});
+
+test('pickEvent：坏档 seed（NaN/0/负数）回退常数，事件抽取不退化且确定', () => {
+  const { NodeFlow, State, EVENTS } = boot();
+  const st = State.create(); st.seed = NaN;
+  const ev = NodeFlow.pickEvent(st);
+  assert.ok(EVENTS.includes(ev), 'seed=NaN 回退后仍抽到合法事件');
+  assert.ok(Number.isFinite(st.seed) && st.seed > 0, 'seed 已回退为有限正数');
+  st.seed = 0;
+  assert.ok(EVENTS.includes(NodeFlow.pickEvent(st)), 'seed=0 回退后仍抽到合法事件');
+  st.seed = -5;
+  assert.ok(EVENTS.includes(NodeFlow.pickEvent(st)), 'seed=负数 回退后仍抽到合法事件');
+  const st2 = State.create(); st2.seed = NaN;
+  assert.equal(NodeFlow.pickEvent(st2).text, ev.text, '同回退常数两次抽取结果确定一致');
 });
 
 test('march：HUD 热区 tap——图鉴 push notebook，存档写档', () => {
