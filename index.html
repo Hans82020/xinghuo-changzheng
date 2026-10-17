@@ -350,7 +350,7 @@ canvas{image-rendering:pixelated;image-rendering:crisp-edges;touch-action:none}
   XH.State = {
     create() {
       return { nodeIndex:0, troops:0, supply:100, morale:80, faith:50,
-        notebook:[], quizRight:0, quizTotal:0, mgStars:[], elapsedMs:0,
+        notebook:[], quizRight:0, quizTotal:0, mgStars:{}, elapsedMs:0,
         lastBonus:0, startedAt:0, seed:Date.now() % 2147483647 };
     },
     beginNode(st, node) {
@@ -390,8 +390,12 @@ canvas{image-rendering:pixelated;image-rendering:crisp-edges;touch-action:none}
       try {
         const raw = storage.get(KEY); if (!raw) return null;
         const obj = JSON.parse(raw);
-        if (obj.v !== VER || !obj.state || typeof obj.state.nodeIndex !== 'number') return null;
-        return obj.state;
+        const s = obj.state;
+        if (obj.v !== VER || !s || typeof s.nodeIndex !== 'number') return null;
+        if (!Array.isArray(s.notebook)) return null;
+        if (!s.mgStars || typeof s.mgStars !== 'object' || Array.isArray(s.mgStars)) return null;
+        if (!Number.isFinite(s.quizRight) || !Number.isFinite(s.quizTotal)) return null;
+        return s;
       } catch { return null; }
     },
     clear(storage) { storage.remove(KEY); }, VER, KEY
@@ -416,7 +420,12 @@ canvas{image-rendering:pixelated;image-rendering:crisp-edges;touch-action:none}
     // —— 音频：WebAudio 合成 8-bit 音效（首次交互后 init）——
     audio: {
       ctx: null,
-      init() { if (!this.ctx && typeof AudioContext !== 'undefined') this.ctx = new AudioContext(); },
+      init() {
+        if (!this.ctx && typeof AudioContext !== 'undefined') {
+          this.ctx = new AudioContext();
+          if (this.ctx.state === 'suspended') { try { this.ctx.resume(); } catch {} }
+        }
+      },
       tone(freq, dur, type, vol) {
         if (!this.ctx) return;
         const t = this.ctx.currentTime, o = this.ctx.createOscillator(), g = this.ctx.createGain();
@@ -425,6 +434,7 @@ canvas{image-rendering:pixelated;image-rendering:crisp-edges;touch-action:none}
         o.connect(g).connect(this.ctx.destination); o.start(t); o.stop(t + dur);
       },
       play(name) {
+        if (this.ctx && this.ctx.state === 'suspended') { try { this.ctx.resume(); } catch {} }
         const seq = {
           click:[[660,.06]], correct:[[523,.09],[659,.09],[784,.16]],
           wrong:[[196,.18],[147,.22]], march:[[131,.12],[131,.12],[196,.2]],

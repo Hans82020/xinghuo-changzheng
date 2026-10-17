@@ -6,8 +6,12 @@
       try {
         const raw = storage.get(KEY); if (!raw) return null;
         const obj = JSON.parse(raw);
-        if (obj.v !== VER || !obj.state || typeof obj.state.nodeIndex !== 'number') return null;
-        return obj.state;
+        const s = obj.state;
+        if (obj.v !== VER || !s || typeof s.nodeIndex !== 'number') return null;
+        if (!Array.isArray(s.notebook)) return null;
+        if (!s.mgStars || typeof s.mgStars !== 'object' || Array.isArray(s.mgStars)) return null;
+        if (!Number.isFinite(s.quizRight) || !Number.isFinite(s.quizTotal)) return null;
+        return s;
       } catch { return null; }
     },
     clear(storage) { storage.remove(KEY); }, VER, KEY

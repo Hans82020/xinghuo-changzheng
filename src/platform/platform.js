@@ -15,7 +15,12 @@
     // —— 音频：WebAudio 合成 8-bit 音效（首次交互后 init）——
     audio: {
       ctx: null,
-      init() { if (!this.ctx && typeof AudioContext !== 'undefined') this.ctx = new AudioContext(); },
+      init() {
+        if (!this.ctx && typeof AudioContext !== 'undefined') {
+          this.ctx = new AudioContext();
+          if (this.ctx.state === 'suspended') { try { this.ctx.resume(); } catch {} }
+        }
+      },
       tone(freq, dur, type, vol) {
         if (!this.ctx) return;
         const t = this.ctx.currentTime, o = this.ctx.createOscillator(), g = this.ctx.createGain();
@@ -24,6 +29,7 @@
         o.connect(g).connect(this.ctx.destination); o.start(t); o.stop(t + dur);
       },
       play(name) {
+        if (this.ctx && this.ctx.state === 'suspended') { try { this.ctx.resume(); } catch {} }
         const seq = {
           click:[[660,.06]], correct:[[523,.09],[659,.09],[784,.16]],
           wrong:[[196,.18],[147,.22]], march:[[131,.12],[131,.12],[196,.2]],

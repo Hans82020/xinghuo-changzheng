@@ -6,6 +6,7 @@ test('state：入场资源=节点 entry+上次加成；delta 夹取；失败判�
   load('src/data/palette.js'); load('src/data/nodes.js'); load('src/core/state.js');
   const { State, NODES } = xh();
   let st = State.create();
+  assert.deepEqual(st.mgStars, {}, 'mgStars 应为对象（nodeId 键可经 JSON 序列化）');
   State.beginNode(st, NODES[0]);
   assert.equal(st.troops, 86000); assert.equal(st.morale, 80);
   State.applyDelta(st, { supply:-999 }); assert.equal(st.supply, 0);

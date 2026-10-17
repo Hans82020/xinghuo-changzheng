@@ -3,7 +3,7 @@
   XH.State = {
     create() {
       return { nodeIndex:0, troops:0, supply:100, morale:80, faith:50,
-        notebook:[], quizRight:0, quizTotal:0, mgStars:[], elapsedMs:0,
+        notebook:[], quizRight:0, quizTotal:0, mgStars:{}, elapsedMs:0,
         lastBonus:0, startedAt:0, seed:Date.now() % 2147483647 };
     },
     beginNode(st, node) {
