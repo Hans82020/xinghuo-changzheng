@@ -530,7 +530,7 @@ canvas{image-rendering:pixelated;image-rendering:crisp-edges;touch-action:none}
       bindCanvas(canvas) {
         const KEYMAP = { ArrowUp:'up', KeyW:'up', ArrowDown:'down', KeyS:'down', ArrowLeft:'left',
           KeyA:'left', ArrowRight:'right', KeyD:'right', Enter:'confirm', Space:'confirm', Escape:'cancel' };
-        addEventListener('keydown', ev => { const a = KEYMAP[ev.code]; if (a) { ev.preventDefault(); this.emit({ type:'key', action:a }); } });
+        addEventListener('keydown', ev => { if (ev.repeat) return; const a = KEYMAP[ev.code]; if (a) { ev.preventDefault(); this.emit({ type:'key', action:a }); } });
         const pt = ev => {
           const r = canvas.getBoundingClientRect();
           this.emit({ type:'tap', x:(ev.clientX - r.left) / r.width * 320, y:(ev.clientY - r.top) / r.height * 180 });
@@ -831,7 +831,7 @@ canvas{image-rendering:pixelated;image-rendering:crisp-edges;touch-action:none}
     // dodge：底部小船+下落漩涡。view={lane,hazards}
     dodge(ctx, view) {
       const C = PD(), v = view || {};
-      RD().text(ctx, '强渡乌江——躲开漩涡与暗礁！', 6, 6, { size: 8, color: C.sparkGold });
+      RD().text(ctx, '强渡大渡河——躲开漩涡与暗礁！', 6, 6, { size: 8, color: C.sparkGold });
       RD().px(ctx, 0, 24, 320, 156, C.water);                      // 江面
       for (let i = 1; i < 4; i++) for (let k = 0; k < 13; k++)     // 分道浪线
         RD().px(ctx, i * 80 - 1, 28 + k * 12 + (k % 2 ? 2 : 0), 2, 6, C.waterDark);
@@ -908,8 +908,8 @@ canvas{image-rendering:pixelated;image-rendering:crisp-edges;touch-action:none}
           return p >= total ? 3 : p >= total / 2 ? 2 : p >= 1 ? 1 : 0;
         }
         case 'rhythm': return r.stars || 0;
-        case 'route': { const ok = r.ok || 0; return ok >= 3 ? 3 : ok === 2 ? 2 : ok === 1 ? 1 : 0; }
-        case 'defend': { const l = r.leaked || 0; return l === 0 ? 3 : l <= 1 ? 2 : l <= 2 ? 1 : 0; }
+        case 'route': return M.routeStars({ results: [0, 1, 2, 3].map(i => i < (r.ok || 0)) });
+        case 'defend': return M.defendFinish({ schedule: [], leaked: r.leaked || 0 }).stars;
         case 'allocate': return (r.valid && r.time < cfg.timeLimit * 2 / 3) ? 3 : r.valid ? 2 : 0;
         case 'trust': return M.trustStars({ trust: r.trust || 0 });
         case 'dodge': {
@@ -966,7 +966,7 @@ canvas{image-rendering:pixelated;image-rendering:crisp-edges;touch-action:none}
         settle('allocate', { valid, time: aTime });
       };
 
-      return {
+      const scene = {
         update(dt) {
           if (g.finished) return;
           if (g.phase === 'result') {                 // 结算展示 0.8s 后回调
@@ -1162,6 +1162,12 @@ canvas{image-rendering:pixelated;image-rendering:crisp-edges;touch-action:none}
           }
         },
       };
+      // trust 选项热区暴露给测试/上层（位置与 onInput 判定一致）
+      if (cfg.type === 'trust') scene.areas = [
+        { x: 36, y: 66, w: 116, h: 72, action: 'positive' },
+        { x: 168, y: 66, w: 116, h: 72, action: 'negative' },
+      ];
+      return scene;
     },
   };
 })(globalThis.XH = globalThis.XH || {});

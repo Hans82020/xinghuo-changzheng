@@ -46,7 +46,7 @@
       bindCanvas(canvas) {
         const KEYMAP = { ArrowUp:'up', KeyW:'up', ArrowDown:'down', KeyS:'down', ArrowLeft:'left',
           KeyA:'left', ArrowRight:'right', KeyD:'right', Enter:'confirm', Space:'confirm', Escape:'cancel' };
-        addEventListener('keydown', ev => { const a = KEYMAP[ev.code]; if (a) { ev.preventDefault(); this.emit({ type:'key', action:a }); } });
+        addEventListener('keydown', ev => { if (ev.repeat) return; const a = KEYMAP[ev.code]; if (a) { ev.preventDefault(); this.emit({ type:'key', action:a }); } });
         const pt = ev => {
           const r = canvas.getBoundingClientRect();
           this.emit({ type:'tap', x:(ev.clientX - r.left) / r.width * 320, y:(ev.clientY - r.top) / r.height * 180 });

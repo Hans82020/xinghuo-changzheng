@@ -42,3 +42,32 @@ test('create：返回可运行场景且 mock ctx 下 draw 不抛', () => {
   scene.update(0.016); scene.update(5); // 快进也应安全
   scene.onInput({ type:'tap', x:160, y:90 });
 });
+
+test('defend 型（mg03）：快进至结算回调一次且星级合法', () => {
+  const { MinigameScene, NODES } = boot();
+  let calls = 0, stars = -1;
+  const scene = MinigameScene.create(NODES[2], { seed: 7 }, s => { calls++; stars = s; });
+  for (let i = 0; i < 30 && calls === 0; i++) scene.update(3); // 反复快进直至回调触发
+  assert.equal(calls, 1, 'onDone 恰好被调用一次');
+  assert.ok(stars >= 0 && stars <= 3, '星级应在 0~3 之间');
+  scene.update(3); scene.update(3);
+  assert.equal(calls, 1, '结算后继续 update 不得重复回调');
+});
+
+test('trust 型（mg04）：连点正确选项 3 轮回调一次且 3 星', () => {
+  const { MinigameScene, NODES } = boot();
+  let calls = 0, stars = -1;
+  const scene = MinigameScene.create(NODES[3], { seed: 7 }, s => { calls++; stars = s; });
+  scene.draw(mockCtx);                                        // 先绘制以暴露热区
+  const area = scene.areas.find(a => a.action === 'positive');
+  assert.ok(area, 'trust 场景需把按钮热区暴露到 scene.areas');
+  for (let i = 0; i < 3; i++) {
+    scene.update(1.5);                                        // 跳过解析展示回到提问
+    scene.onInput({ type: 'tap', x: area.x + 5, y: area.y + 5 });
+  }
+  scene.update(0.9);                                          // 结算展示 0.8s 后回调
+  assert.equal(calls, 1, 'onDone 恰好被调用一次');
+  assert.equal(stars, 3, '3 轮全选正确项应得 3 星');
+  scene.update(1);
+  assert.equal(calls, 1, '不得重复回调');
+});

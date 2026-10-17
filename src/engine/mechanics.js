@@ -209,7 +209,7 @@
     // dodge：底部小船+下落漩涡。view={lane,hazards}
     dodge(ctx, view) {
       const C = PD(), v = view || {};
-      RD().text(ctx, '强渡乌江——躲开漩涡与暗礁！', 6, 6, { size: 8, color: C.sparkGold });
+      RD().text(ctx, '强渡大渡河——躲开漩涡与暗礁！', 6, 6, { size: 8, color: C.sparkGold });
       RD().px(ctx, 0, 24, 320, 156, C.water);                      // 江面
       for (let i = 1; i < 4; i++) for (let k = 0; k < 13; k++)     // 分道浪线
         RD().px(ctx, i * 80 - 1, 28 + k * 12 + (k % 2 ? 2 : 0), 2, 6, C.waterDark);

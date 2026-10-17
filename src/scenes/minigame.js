@@ -13,8 +13,8 @@
           return p >= total ? 3 : p >= total / 2 ? 2 : p >= 1 ? 1 : 0;
         }
         case 'rhythm': return r.stars || 0;
-        case 'route': { const ok = r.ok || 0; return ok >= 3 ? 3 : ok === 2 ? 2 : ok === 1 ? 1 : 0; }
-        case 'defend': { const l = r.leaked || 0; return l === 0 ? 3 : l <= 1 ? 2 : l <= 2 ? 1 : 0; }
+        case 'route': return M.routeStars({ results: [0, 1, 2, 3].map(i => i < (r.ok || 0)) });
+        case 'defend': return M.defendFinish({ schedule: [], leaked: r.leaked || 0 }).stars;
         case 'allocate': return (r.valid && r.time < cfg.timeLimit * 2 / 3) ? 3 : r.valid ? 2 : 0;
         case 'trust': return M.trustStars({ trust: r.trust || 0 });
         case 'dodge': {
@@ -71,7 +71,7 @@
         settle('allocate', { valid, time: aTime });
       };
 
-      return {
+      const scene = {
         update(dt) {
           if (g.finished) return;
           if (g.phase === 'result') {                 // 结算展示 0.8s 后回调
@@ -267,6 +267,12 @@
           }
         },
       };
+      // trust 选项热区暴露给测试/上层（位置与 onInput 判定一致）
+      if (cfg.type === 'trust') scene.areas = [
+        { x: 36, y: 66, w: 116, h: 72, action: 'positive' },
+        { x: 168, y: 66, w: 116, h: 72, action: 'negative' },
+      ];
+      return scene;
     },
   };
 })(globalThis.XH = globalThis.XH || {});
