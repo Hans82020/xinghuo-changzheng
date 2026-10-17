@@ -67,6 +67,39 @@ test('dual：双线操作', () => {
   for (let i = 0; i < 100; i++) { d = M.dualStep(d, 'climb', 0.1); d = M.dualStep(d, 'front', 0.1); }
   assert.equal(M.dualDone(d), true, '爬满 100 应完成');
 });
+test('rhythm：miss 分支（容差外/全判完再按）与 poor 分支', () => {
+  load('src/engine/mechanics.js'); const M = xh().Mech;
+  let rs = M.rhythmInit([1]);
+  rs = M.rhythmPress(rs, 1.16, 0.1); assert.equal(rs.judges[0], 'miss', '超出 1.5×tol 判 miss');
+  assert.equal(rs.hit[0], false, 'miss 不消耗节拍');
+  rs = M.rhythmPress(rs, 1.14, 0.1); assert.equal(rs.judges[1], 'poor', '1.3~1.5×tol 之间判 poor');
+  assert.equal(rs.hit[0], true, 'poor 命中节拍');
+  rs = M.rhythmPress(rs, 2.0, 0.1); assert.equal(rs.judges[2], 'miss', '全部节拍判完后再按判 miss');
+});
+test('dualStars：佯攻条落底但攀城完成只给 1 星', () => {
+  load('src/engine/mechanics.js'); const M = xh().Mech;
+  let d = M.dualInit();
+  for (let i = 0; i < 10; i++) d = M.dualStep(d, 'climb', 0.1); // 只攀不佯攻，front 衰减落底
+  assert.equal(d.frontDropped, true);
+  assert.equal(M.dualDone(d), true);
+  assert.equal(M.dualStars(d), 1);
+});
+test('routeStars：全选设防点 0 星；轮次越界再选被忽略', () => {
+  load('src/engine/mechanics.js'); const M = xh().Mech;
+  let st = M.routeInit([ [1,2], [0,3], [0,1], [2,3] ]);
+  for (const p of [1, 0, 0, 2]) st = M.routePick(st, p); // 每轮都撞设防点
+  assert.deepEqual(st.results, [false, false, false, false]);
+  assert.equal(M.routeStars(st), 0);
+  st = M.routePick(st, 0);
+  assert.equal(st.results.length, 4, '越界选择不推结果');
+});
+test('allocateValid：负值/非数字/缺项均判 false', () => {
+  load('src/engine/mechanics.js'); const M = xh().Mech;
+  const slots = [{ id:'a', min:2 }, { id:'b', min:3 }];
+  assert.equal(M.allocateValid({ a:-1, b:4 }, slots, 6), false, '负值');
+  assert.equal(M.allocateValid({ a:'2', b:4 }, slots, 6), false, '非数字');
+  assert.equal(M.allocateValid({ b:4 }, slots, 6), false, '缺项');
+});
 test('mechDraw：mock ctx 下 9 个绘制函数均不抛异常', () => {
   load('src/data/palette.js'); load('src/engine/render.js'); load('src/engine/mechanics.js');
   const D = xh().MechDraw;

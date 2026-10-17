@@ -25,9 +25,9 @@
       const ratio = st.beats.length ? good / st.beats.length : 0;
       return { miss, stars: ratio >= 0.9 ? 3 : ratio >= 0.6 ? 2 : ratio >= 0.3 ? 1 : 0 };
     },
-    // 3) route：避开设防点则成功
+    // 3) route：避开设防点则成功（轮次越界时忽略选择，不动结果）
     routeInit(guardsPerRound) { return { guards: guardsPerRound, round: 0, results: [] }; },
-    routePick(st, point) { st.results.push(!st.guards[st.round].includes(point)); st.round++; return st; },
+    routePick(st, point) { if (st.round >= st.guards.length) return st; st.results.push(!st.guards[st.round].includes(point)); st.round++; return st; },
     routeStars(st) { const ok = st.results.filter(Boolean).length; return ok >= 3 ? 3 : ok === 2 ? 2 : ok === 1 ? 1 : 0; },
     // 4) defend：波次阻击（先老化在场波次，再生成到点波次，新波次不在出生当拍漏防）
     defendSchedule(waves, gap) { return Array.from({ length: waves }, (_, i) => ({ t: (i + 1) * gap, dir: i % 4 })); },

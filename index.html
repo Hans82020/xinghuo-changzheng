@@ -513,7 +513,7 @@ canvas{image-rendering:pixelated;image-rendering:crisp-edges;touch-action:none}
 /*== loop.js ==*/
 ;(function (XH) {
   XH.Loop = {
-    stack: [], _last: 0, _acc: 0, _running: false,
+    stack: [], _last: 0, _running: false,
     push(scene) { this.stack.push(scene); if (scene.enter) scene.enter(); },
     pop() { return this.stack.pop(); },
     replace(scene) { this.pop(); this.push(scene); },
@@ -521,11 +521,14 @@ canvas{image-rendering:pixelated;image-rendering:crisp-edges;touch-action:none}
     handleInput(e) { const s = this.top(); if (s && s.onInput) s.onInput(e); },
     tick(ts) {
       if (!this._running) return;
-      const dt = Math.min(0.1, (ts - this._last) / 1000); this._last = ts;
-      const s = this.top();
-      if (s && s.update) s.update(dt);
-      const ctx = this._ctx; if (s && s.draw && ctx) { ctx.clearRect(0, 0, 320, 180); s.draw(ctx); }
-      requestAnimationFrame(ts => this.tick(ts));
+      try {
+        const dt = Math.min(0.1, (ts - this._last) / 1000); this._last = ts;
+        const s = this.top();
+        if (s && s.update) s.update(dt);
+        const cur = this.top(); // update 内可能 replace/pop，重取栈顶再绘制
+        const ctx = this._ctx; if (cur && cur.draw && ctx) { ctx.clearRect(0, 0, 320, 180); cur.draw(ctx); }
+      } catch (err) { console.error('[XH.Loop] 帧异常', err); }
+      finally { requestAnimationFrame(t => this.tick(t)); } // 单帧抛错不永久停转
     },
     start(canvas) {
       this._ctx = canvas.getContext('2d'); this._ctx.imageSmoothingEnabled = false;
@@ -565,9 +568,9 @@ canvas{image-rendering:pixelated;image-rendering:crisp-edges;touch-action:none}
       const ratio = st.beats.length ? good / st.beats.length : 0;
       return { miss, stars: ratio >= 0.9 ? 3 : ratio >= 0.6 ? 2 : ratio >= 0.3 ? 1 : 0 };
     },
-    // 3) route：避开设防点则成功
+    // 3) route：避开设防点则成功（轮次越界时忽略选择，不动结果）
     routeInit(guardsPerRound) { return { guards: guardsPerRound, round: 0, results: [] }; },
-    routePick(st, point) { st.results.push(!st.guards[st.round].includes(point)); st.round++; return st; },
+    routePick(st, point) { if (st.round >= st.guards.length) return st; st.results.push(!st.guards[st.round].includes(point)); st.round++; return st; },
     routeStars(st) { const ok = st.results.filter(Boolean).length; return ok >= 3 ? 3 : ok === 2 ? 2 : ok === 1 ? 1 : 0; },
     // 4) defend：波次阻击（先老化在场波次，再生成到点波次，新波次不在出生当拍漏防）
     defendSchedule(waves, gap) { return Array.from({ length: waves }, (_, i) => ({ t: (i + 1) * gap, dir: i % 4 })); },
