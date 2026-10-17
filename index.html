@@ -529,7 +529,7 @@ canvas{image-rendering:pixelated;image-rendering:crisp-edges;touch-action:none}
       emit(e) { this._cbs.forEach(cb => cb(e)); },
       bindCanvas(canvas) {
         const KEYMAP = { ArrowUp:'up', KeyW:'up', ArrowDown:'down', KeyS:'down', ArrowLeft:'left',
-          KeyA:'left', ArrowRight:'right', KeyD:'right', Enter:'confirm', Space:'confirm', Escape:'cancel' };
+          KeyA:'left', ArrowRight:'right', KeyD:'right', Enter:'confirm', Space:'confirm', Escape:'cancel', KeyK:'continue' };
         addEventListener('keydown', ev => { if (ev.repeat) return; const a = KEYMAP[ev.code]; if (a) { ev.preventDefault(); this.emit({ type:'key', action:a }); } });
         const pt = ev => {
           const r = canvas.getBoundingClientRect();
@@ -1519,6 +1519,290 @@ canvas{image-rendering:pixelated;image-rendering:crisp-edges;touch-action:none}
       return scene;
     },
   };
+})(globalThis.XH = globalThis.XH || {});
+
+/*== title.js ==*/
+;(function (XH) {
+  // 标题场景：夜色星空 + 火把粒子 + 大字标题；confirm 开始（有档读档），K 继续行军
+  XH.Scenes = XH.Scenes || {};
+  XH.Scenes.title = () => {
+    const R = () => XH.Render, C = () => XH.PALETTE;
+    let t = 0, hasSave = false;
+    // 固定星空点位（确定性伪随机，不随帧抖动）
+    const stars = [];
+    for (let i = 0; i < 42; i++) {
+      const s = (i * 137 + 29) % 251;
+      stars.push([2 + (i * 53 + s) % 316, 3 + s % 92]);
+    }
+    const go = () => {
+      const saved = XH.Save.read(XH.Platform.storage);
+      XH.Loop.replace(XH.Scenes.march(saved || XH.State.create()));
+    };
+    const scene = {
+      name: 'title',
+      enter() { hasSave = !!XH.Save.read(XH.Platform.storage); },
+      update(dt) { t += dt; },
+      draw(ctx) {
+        const R0 = R(), C0 = C();
+        R0.px(ctx, 0, 0, 320, 180, C0.nightBlue);
+        R0.px(ctx, 0, 150, 320, 30, C0.inkBlack);            // 地平线剪影
+        for (const p of stars) R0.px(ctx, p[0], p[1], 1, 1, C0.textDim);
+        for (const tx of [36, 284]) {                        // 两侧火把
+          R0.px(ctx, tx, 118, 3, 26, C0.woodDark);
+          R0.px(ctx, tx - 2, 108, 7, 10, C0.torch);
+          R0.px(ctx, tx, 111, 3, 5, C0.flameCore);
+        }
+        for (let i = 0; i < 10; i++) {                       // 上升火星粒子
+          const ph = (t * 20 + i * 9) % 42;
+          const px = (i % 2 ? 284 : 36) + Math.round(Math.sin(t * 3 + i * 2) * 4);
+          R0.px(ctx, px, Math.round(108 - ph), 1, 1, i % 3 ? C0.torch : C0.flameCore);
+        }
+        R0.text(ctx, '星火长征', 160, 38, { size: 24, align: 'center', color: C0.sparkGold });
+        R0.text(ctx, '二万五千里行军记', 160, 80, { size: 8, align: 'center', color: C0.textDim });
+        R0.text(ctx, '按 回车 / 点击 开始', 160, 122, { size: 8, align: 'center', color: C0.textMain });
+        if (hasSave) R0.text(ctx, '继续行军 (K)', 160, 138, { size: 7, align: 'center', color: C0.torch });
+      },
+      onInput(e) {
+        if (e.type === 'tap') { go(); return; }
+        if (e.type !== 'key') return;
+        if (e.action === 'confirm') go();
+        else if (e.action === 'continue' && hasSave) go();
+      },
+    };
+    return scene;
+  };
+})(globalThis.XH = globalThis.XH || {});
+
+/*== march.js ==*/
+;(function (XH) {
+  // 行军场景：队伍沿节点连线前进（18px/s），0.4/0.8 进度抽事件，抵达进入节点流程；
+  // HUD 图鉴/存档按钮热区由本场景 onInput 判定（hud.js 注释约定）
+  XH.Scenes = XH.Scenes || {};
+  XH.Scenes.march = (st) => {
+    const R = () => XH.Render, C = () => XH.PALETTE;
+    const SPD = 18;                                        // 行军速度 px/s
+    let idx = 0, node = null;
+    let ax = 0, ay = 0, bx = 0, by = 0, len = 1;
+    let progress = 0, arrived = false, ev40 = false, ev80 = false;
+
+    const enter = () => {
+      idx = Math.min(st.nodeIndex || 0, XH.NODES.length - 1);
+      node = XH.NODES[idx];
+      const from = idx > 0 ? XH.NODES[idx - 1].pos : [node.pos[0], node.pos[1] + 26];  // 首节点：从集结地出发
+      ax = from[0]; ay = from[1]; bx = node.pos[0]; by = node.pos[1];
+      len = Math.max(1, Math.hypot(bx - ax, by - ay));
+      progress = 0; ev40 = false; ev80 = false; arrived = false;
+    };
+
+    const triggerEvent = () => {
+      const ev = XH.NodeFlow.pickEvent(st);
+      const card = { choice: { prompt: ev.text, options: ev.options } };
+      XH.Loop.push(XH.Overlay.choice(card, opt => XH.NodeFlow.applyEffects(st, opt.effects)));
+    };
+
+    const arrive = () => {
+      arrived = true;
+      // n03（湘江）特殊编排：先弹强减员剧情卡，确认后再进入节点流程
+      if (node.id === 'n03') XH.Loop.push(XH.Overlay.story(node, () => XH.NodeFlow.start(st, node)));
+      else XH.NodeFlow.start(st, node);
+    };
+
+    const scene = {
+      name: 'march', st,
+      enter,
+      update(dt) {
+        if (st.nodeIndex !== idx) { enter(); return; }     // 节点流程完成后重同步路径，本帧不前进
+        if (arrived) return;
+        st.elapsedMs += dt * 1000;
+        progress += SPD * dt / len;
+        if (!ev40 && progress >= 0.4) { ev40 = true; triggerEvent(); }
+        if (!ev80 && progress >= 0.8) { ev80 = true; triggerEvent(); }
+        if (progress >= 1) { progress = 1; arrive(); }
+      },
+      draw(ctx) {
+        const R0 = R(), C0 = C(), N = XH.NODES;
+        R0.theme(ctx, node.theme);
+        for (let i = 1; i < N.length; i++) {               // 全程路线虚线：已走金色 / 未走暗灰
+          const p = N[i - 1].pos, q = N[i].pos, col = i <= st.nodeIndex ? C0.sparkGold : C0.textDim;
+          for (let d = 0; d < 1; d += 0.07) {
+            R0.px(ctx, Math.round(p[0] + (q[0] - p[0]) * d), Math.round(p[1] + (q[1] - p[1]) * d), 2, 2, col);
+          }
+        }
+        N.forEach((nd, i) => {                             // 节点标记：已到金 / 当前红 / 未到灰
+          const col = i < st.nodeIndex ? C0.sparkGold : i === st.nodeIndex ? C0.flagRed : C0.uiPanelLight;
+          R0.px(ctx, nd.pos[0] - 1, nd.pos[1] - 1, 3, 3, col);
+        });
+        R0.sprite(ctx, XH.SPRITES.flag, node.pos[0] + 4, Math.max(25, node.pos[1] - 26));  // 终点旗帜
+        const px = ax + (bx - ax) * progress, py = ay + (by - ay) * progress;
+        R0.sprite(ctx, XH.SPRITES.soldier, Math.round(px) - 8, Math.max(25, Math.round(py) - 15));
+        XH.HUD.draw(ctx, st);
+      },
+      onInput(e) {
+        if (e.type !== 'tap') return;
+        const a = (XH.HUD.areas || []).find(a => e.x >= a.x && e.x <= a.x + a.w && e.y >= a.y && e.y <= a.y + a.h);
+        if (!a) return;
+        if (a.action === 'notebook') XH.Loop.push(XH.Overlay.notebook(st));
+        else if (a.action === 'save') {
+          XH.Save.write(XH.Platform.storage, st);
+          try { XH.Platform.audio.play('save'); } catch (err) {}
+        }
+      },
+    };
+    return scene;
+  };
+})(globalThis.XH = globalThis.XH || {});
+
+/*== nodeflow.js ==*/
+;(function (XH) {
+  // 节点编排器：
+  //   start    → beginNode → story → choice(applyDelta) → quiz(3题) → MinigameScene → finishMg
+  //   finishMg → finishNode → Save → summary → 失败弹 restart / 完成 14 节点弹 report / 否则回 march
+  XH.NodeFlow = {
+    // 资源变动统一入口：DEBUG_LOCK 开启时把负值归零（调试锁，供 march 事件与节点抉择复用）
+    applyEffects(st, d) {
+      if (XH.DEBUG_LOCK && d) {
+        const safe = {};
+        for (const k of ['troops', 'supply', 'morale', 'faith'])
+          if (Number.isFinite(d[k])) safe[k] = Math.max(0, d[k]);
+        d = safe;
+      }
+      return XH.State.applyDelta(st, d);
+    },
+
+    // 行军事件抽取：seed 线性同余伪随机（seed=(seed*48271)%2147483647），按权重抽，minFaith 过滤
+    pickEvent(st) {
+      st.seed = (st.seed * 48271) % 2147483647;
+      const pool = XH.EVENTS.filter(ev => !ev.minFaith || st.faith >= ev.minFaith);
+      let r = (st.seed / 2147483647) * pool.reduce((s, e) => s + e.weight, 0);
+      for (const ev of pool) { r -= ev.weight; if (r < 0) return ev; }
+      return pool[pool.length - 1];
+    },
+
+    start(st, node) {
+      XH.State.beginNode(st, node);
+      XH.Loop.push(XH.Overlay.story(node, () => {
+        XH.Loop.push(XH.Overlay.choice(node, opt => {
+          XH.NodeFlow.applyEffects(st, opt.effects);
+          const qs = XH.QUESTIONS.filter(q => q.nodeId === node.id);
+          XH.Loop.push(XH.Overlay.quiz(qs, (right, total) => {
+            XH.State.quizResult(st, right, total);
+            XH.Loop.push(XH.MinigameScene.create(node, st,
+              stars => XH.NodeFlow.finishMg(st, node, stars)));
+          }));
+        }));
+      }));
+    },
+
+    finishMg(st, node, stars) {
+      const bonus = XH.State.finishNode(st, node, stars);
+      XH.Save.write(XH.Platform.storage, st);
+      // MinigameScene 不自行 pop，用 replace 换入 summary
+      XH.Loop.replace(XH.Overlay.summary(node, bonus, () => {
+        if (XH.State.isFailed(st)) {
+          XH.Loop.push(XH.Overlay.restart(st, i => {
+            st.lastBonus = 0;
+            XH.State.beginNode(st, XH.NODES[i]);
+            st.nodeIndex = i;
+            XH.Loop.replace(XH.Scenes.march(st));
+          }));
+        } else if (st.nodeIndex >= XH.NODES.length) {
+          XH.Loop.replace(XH.Scenes.report(st));
+        }
+        // 否则 summary 已自行 pop，栈顶自然回到 march
+      }));
+    },
+
+    // 调试/T16 验收：新建 State 直接进入第 m 个节点流程（m：0~13），返回新建的 st
+    __jump(m) {
+      const idx = Math.max(0, Math.min(13, m | 0));
+      const st = XH.State.create();
+      st.nodeIndex = idx;
+      XH.Loop.stack.length = 0;
+      XH.Loop.push(XH.Scenes.march(st));                   // 底层 march：流程结束后可回
+      XH.NodeFlow.start(st, XH.NODES[idx]);
+      return st;
+    },
+  };
+})(globalThis.XH = globalThis.XH || {});
+
+/*== report.js ==*/
+;(function (XH) {
+  // 通关报告：用时 / 答题正确率 / 玩法星总数 / 笔记收集 / 兵力对比 + 结语三档 + 重新出发回 title
+  XH.Scenes = XH.Scenes || {};
+  XH.Scenes.report = (st) => {
+    const R = () => XH.Render, C = () => XH.PALETTE;
+    const total = XH.NODES.length;
+    const ratio = ((st.notebook || []).length) / total;
+    const word = ratio < 0.5 ? '长征永远在路上'
+      : ratio < 0.9 ? '星星之火，正在燎原'
+      : '红军不怕远征难，万水千山只等闲';
+    const stars = Object.keys(st.mgStars || {}).reduce((s, k) => s + (st.mgStars[k] || 0), 0);
+    const mins = Math.floor((st.elapsedMs || 0) / 60000), secs = Math.floor((st.elapsedMs || 0) / 1000) % 60;
+    const scene = {
+      name: 'report', st, word,
+      update() {},
+      draw(ctx) {
+        const R0 = R(), C0 = C();
+        R0.px(ctx, 0, 0, 320, 180, C0.inkBlack);
+        R0.panel(ctx, 20, 8, 280, 150);
+        R0.text(ctx, '长 征 胜 利', 160, 16, { size: 14, align: 'center', color: C0.sparkGold });
+        const rows = [
+          '行军用时：' + mins + ' 分 ' + secs + ' 秒',
+          '答题正确：' + (st.quizRight || 0) + ' / ' + (st.quizTotal || 0),
+          '玩法星数：' + stars + ' / ' + total * 3,
+          '党史笔记：' + ((st.notebook || []).length) + ' / ' + total,
+          '出发 8.6 万 → 现在约 ' + XH.HUD.fmtTroops(st.troops || 0),
+        ];
+        rows.forEach((ln, i) => R0.text(ctx, ln, 40, 40 + i * 14, { size: 8, color: C0.textMain }));
+        R0.panel(ctx, 44, 116, 232, 28);
+        R0.text(ctx, word, 160, 126, { size: 9, align: 'center', color: C0.sparkGold });
+        R0.text(ctx, '点击重新出发', 160, 166, { size: 8, align: 'center', color: C0.textMain });
+      },
+      onInput(e) {
+        if (e.type !== 'tap' && !(e.type === 'key' && e.action === 'confirm')) return;
+        XH.Save.clear(XH.Platform.storage);                // 新一局：清除旧存档
+        XH.Loop.stack.length = 0;
+        XH.Loop.push(XH.Scenes.title());
+      },
+    };
+    return scene;
+  };
+})(globalThis.XH = globalThis.XH || {});
+
+/*== main.js ==*/
+;(function (XH) {
+  // —— 浏览器唯一入口（Node 测试不加载本文件；本文件是唯一允许 document/addEventListener/location 的源码）——
+  XH.DEBUG_LOCK = false;
+  const canvas = document.getElementById('game');
+
+  // 画布整数倍缩放适配窗口（保持像素风）
+  function fit() {
+    const s = Math.max(1, Math.floor(Math.min(window.innerWidth / 320, window.innerHeight / 180)));
+    canvas.style.width = (320 * s) + 'px';
+    canvas.style.height = (180 * s) + 'px';
+  }
+  window.addEventListener('resize', fit); fit();
+
+  // 调试：?debug=1 时数字键 1~9/0 跳节点（XH.NodeFlow.__jump），F 键切 DEBUG_LOCK（负值归零锁）
+  if (/(?:\?|&)debug=1/.test(window.location.search)) {
+    window.addEventListener('keydown', e => {
+      if (e.key >= '1' && e.key <= '9') XH.NodeFlow.__jump(e.key.charCodeAt(0) - 49);
+      else if (e.key === '0') XH.NodeFlow.__jump(9);
+      else if (e.code === 'KeyF') XH.DEBUG_LOCK = !XH.DEBUG_LOCK;
+    });
+  }
+
+  // 首次交互初始化音频（浏览器自动播放策略：需用户手势后才能出声）
+  const initAudio = () => {
+    XH.Platform.audio.init();
+    window.removeEventListener('pointerdown', initAudio);
+    window.removeEventListener('keydown', initAudio);
+  };
+  window.addEventListener('pointerdown', initAudio);
+  window.addEventListener('keydown', initAudio);
+
+  XH.Loop.start(canvas);
+  XH.Loop.push(XH.Scenes.title());
 })(globalThis.XH = globalThis.XH || {});
 
 </script></body></html>

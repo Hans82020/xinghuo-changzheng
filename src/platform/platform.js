@@ -45,7 +45,7 @@
       emit(e) { this._cbs.forEach(cb => cb(e)); },
       bindCanvas(canvas) {
         const KEYMAP = { ArrowUp:'up', KeyW:'up', ArrowDown:'down', KeyS:'down', ArrowLeft:'left',
-          KeyA:'left', ArrowRight:'right', KeyD:'right', Enter:'confirm', Space:'confirm', Escape:'cancel' };
+          KeyA:'left', ArrowRight:'right', KeyD:'right', Enter:'confirm', Space:'confirm', Escape:'cancel', KeyK:'continue' };
         addEventListener('keydown', ev => { if (ev.repeat) return; const a = KEYMAP[ev.code]; if (a) { ev.preventDefault(); this.emit({ type:'key', action:a }); } });
         const pt = ev => {
           const r = canvas.getBoundingClientRect();
