@@ -9,6 +9,7 @@ const ORDER = [
   'src/data/questions.js', 'src/data/events.js', 'src/data/mg-configs.js',
   'src/core/state.js', 'src/core/save.js', 'src/platform/platform.js',
   'src/engine/render.js', 'src/engine/loop.js', 'src/engine/mechanics.js',
+  'src/scenes/minigame.js',
   'src/ui/hud.js', 'src/ui/overlays.js', 'src/scenes/title.js', 'src/scenes/march.js',
   'src/scenes/nodeflow.js', 'src/scenes/report.js', 'src/main.js',
 ];

@@ -344,6 +344,85 @@ canvas{image-rendering:pixelated;image-rendering:crisp-edges;touch-action:none}
   ];
 })(globalThis.XH = globalThis.XH || {});
 
+/*== mg-configs.js ==*/
+;(function (XH) {
+  // 14 个玩法配置：type 对应 XH.Mech 逻辑核，hint 为玩法提示（史实文案，不编造数字）
+  XH.MG_CONFIGS = {
+    // n01 于都夜渡：搭浮桥（敌机间隙铺门板）
+    mg01: { type: 'timing', hint: '敌机掠过的间隙里铺上门板！',
+      windows: [{ start: 2, end: 3.2 }, { start: 5, end: 6.2 }, { start: 8, end: 9.2 }] },
+
+    // n02 突破封锁线：穿插突围（巡逻队交接缺口）
+    mg02: { type: 'timing', hint: '抓住巡逻队交接的缺口穿过封锁线！',
+      windows: [{ start: 1.5, end: 2.4 }, { start: 4.4, end: 5.3 }, { start: 7.4, end: 8.3 }, { start: 10.4, end: 11.3 }] },
+
+    // n03 湘江战役：殿后死守（红34师）
+    mg03: { type: 'defend', hint: '红34师殿后——守住每一波冲锋！', waves: 6, gap: 2.5, hitLoss: 800 },
+
+    // n04 通道转兵：转兵决策
+    mg04: { type: 'trust', hint: '危急关头，每一次决断都在校准航向！', rounds: [
+      { prompt: '湘江之后，往哪里走？', positive: '转兵贵州，避敌锋芒', negative: '坚持北上湘西',
+        explain: '通道会议力主转兵敌人力量薄弱的贵州，避开了重兵预设的口袋。' },
+      { prompt: '面对坚固设防城市', positive: '避实击虚，运动歼敌', negative: '强行攻坚',
+        explain: '不打硬碰硬的消耗战，在运动中调动敌人、创造战机。' },
+      { prompt: '敌军重兵压境', positive: '主动调动敌人，创造战机', negative: '被动分兵抵抗',
+        explain: '灵活机动方能变被动为主动，分兵死守只会陷入合围。' },
+    ] },
+
+    // n05 遵义会议：拨正航向（纠正三种错误倾向）
+    mg05: { type: 'trust', hint: '拨正航向——纠正军事指挥上的错误倾向！', rounds: [
+      { prompt: '如何对待进攻中的冒险主义？', positive: '纠正这一错误倾向', negative: '继续沿用',
+        explain: '遵义会议集中全力纠正军事上的错误路线，结束了冒险主义的指挥。' },
+      { prompt: '如何对待防御中的保守主义？', positive: '纠正这一错误倾向', negative: '继续沿用',
+        explain: '遵义会议结束了"左"倾教条主义军事路线，找回机动灵活的战法。' },
+      { prompt: '如何对待退却中的逃跑主义？', positive: '纠正这一错误倾向', negative: '继续沿用',
+        explain: '遵义会议确立了正确的军事指挥，红军从此化被动为主动。' },
+    ] },
+
+    // n06 四渡赤水：声东击西（4 轮渡口抉择，每轮 2 个设防点）
+    mg06: { type: 'route', hint: '四渡赤水——选出敌军想不到的渡口！',
+      guards: [[0, 1], [1, 2], [2, 3], [0, 3]] },
+
+    // n07 巧渡金沙江：摆渡调度（三十七名船工人歇船不歇）
+    mg07: { type: 'allocate', hint: '37 名船工人歇船不歇，排好三班！', pool: 12, timeLimit: 30,
+      slots: [{ id: 'early', min: 2, label: '凌晨班' }, { id: 'day', min: 4, label: '白班' }, { id: 'night', min: 3, label: '夜班' }] },
+
+    // n08 彝海结盟：以诚相待（彝区习俗抉择）
+    mg08: { type: 'trust', hint: '以诚相待——尊重彝胞，团结过境！', rounds: [
+      { prompt: '彝家有自己的风俗禁忌，队伍该如何行事？', positive: '尊重彝家风俗，入乡随俗', negative: '各行其是，不予理会',
+        explain: '尊重民族习俗，是红军民族政策赢得人心的第一步。' },
+      { prompt: '向彝胞借用物品之后呢？', positive: '如数归还，买卖公平', negative: '军情紧急，暂缓归还',
+        explain: '红军借物必还、买卖公平，用行动赢得彝胞信任。' },
+      { prompt: '个别战士与彝胞发生摩擦时？', positive: '严明纪律，绝不打骂群众', negative: '听之任之，不加过问',
+        explain: '铁的纪律是红军的立身之本，损害群众利益必严肃纠正。' },
+      { prompt: '彝海之滨，首领小叶丹提议结盟？', positive: '真诚相待，歃血为盟', negative: '婉言推脱，口头敷衍',
+        explain: '刘伯承与果基小叶丹彝海结盟，红军顺利通过彝区。' },
+    ] },
+
+    // n09 强渡大渡河：浪尖冲锋（躲漩涡与弹雨）
+    mg09: { type: 'dodge', hint: '躲开漩涡与弹雨，把勇士送上对岸！', hazardCount: 25, duration: 60 },
+
+    // n10 飞夺泸定桥：昼夜奔袭（240 里昼夜兼程）
+    mg10: { type: 'rhythm', hint: '240 里昼夜兼程——跟上鼓点！', tol: 0.12,
+      beats: Array.from({ length: 20 }, (_, i) => 0.8 + i * 0.6) },
+
+    // n11 翻越夹金山：翻山（风雪中稳住队形）
+    mg11: { type: 'rhythm', hint: '风雪扑面——按节奏稳住队形！', tol: 0.10,
+      beats: Array.from({ length: 24 }, (_, i) => 0.8 + i * 0.5) },
+
+    // n12 过草地：草地行军（干粮分配，伤员优先）
+    mg12: { type: 'allocate', hint: '干粮不多——伤员优先，官兵一致！', pool: 10, timeLimit: 25,
+      slots: [{ id: 'wounded', min: 1, label: '伤员' }, { id: 'fight', min: 2, label: '战斗员' },
+        { id: 'cooks', min: 2, label: '炊事班' }, { id: 'backup', min: 1, label: '预备队' }] },
+
+    // n13 激战腊子口：攀崖奇兵（正面佯攻 + 侧后攀爬双线）
+    mg13: { type: 'dual', hint: '正面佯攻不能停，侧后攀崖要抓紧！（←佯攻 →攀爬）' },
+
+    // n14 三军会师：大会师（三面红旗汇聚）
+    mg14: { type: 'finale', hint: '按住确认键，让三面红旗汇聚！' },
+  };
+})(globalThis.XH = globalThis.XH || {});
+
 /*== state.js ==*/
 ;(function (XH) {
   const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
@@ -809,6 +888,280 @@ canvas{image-rendering:pixelated;image-rendering:crisp-edges;touch-action:none}
       }
       this._bar(ctx, 96, 154, 128, 8, p, C.sparkGold);
       RD().text(ctx, '星星之火，可以燎原', 160, 168, { size: 8, align: 'center', color: C.flameCore });
+    },
+  };
+})(globalThis.XH = globalThis.XH || {});
+
+/*== minigame.js ==*/
+;(function (XH) {
+  // 通用玩法场景：读 MG_CONFIGS[node.mg]，按 type 组装 Mech 状态与 MechDraw 视图
+  const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+  const starStr = n => '★'.repeat(n) + '☆'.repeat(3 - n);
+
+  XH.MinigameScene = {
+    // 结算星级映射（纯函数）：timing/dodge 按比例，rhythm/route/defend/trust/dual 直通 Mech 规则
+    scoreStars(type, result, cfg) {
+      const M = XH.Mech, r = result || {};
+      switch (type) {
+        case 'timing': {
+          const total = cfg.windows.length, p = r.perfect || 0;
+          return p >= total ? 3 : p >= total / 2 ? 2 : p >= 1 ? 1 : 0;
+        }
+        case 'rhythm': return r.stars || 0;
+        case 'route': { const ok = r.ok || 0; return ok >= 3 ? 3 : ok === 2 ? 2 : ok === 1 ? 1 : 0; }
+        case 'defend': { const l = r.leaked || 0; return l === 0 ? 3 : l <= 1 ? 2 : l <= 2 ? 1 : 0; }
+        case 'allocate': return (r.valid && r.time < cfg.timeLimit * 2 / 3) ? 3 : r.valid ? 2 : 0;
+        case 'trust': return M.trustStars({ trust: r.trust || 0 });
+        case 'dodge': {
+          const hz = cfg.hazardCount, h = r.hits || 0;
+          return h <= Math.ceil(hz * 0.04) ? 3 : h <= Math.ceil(hz * 0.1) ? 2 : h <= Math.ceil(hz * 0.2) ? 1 : 0;
+        }
+        case 'dual': return M.dualStars(r);
+        case 'finale': return 3;
+        default: return 0;
+      }
+    },
+
+    create(node, st, onDone) {
+      const M = XH.Mech, MD = XH.MechDraw, R = XH.Render, C = () => XH.PALETTE;
+      const cfg = XH.MG_CONFIGS[node.mg];
+      const g = { type: cfg.type, phase: 'play', t: 0, resultT: 0, stars: 0, finished: false };
+
+      // —— 结算：0.8s 展示成功/失败与星级后回调一次 ——
+      const finish = (stars) => {
+        if (g.phase === 'result') return;
+        g.stars = stars; g.phase = 'result'; g.resultT = 0;
+        try { if (XH.Platform && XH.Platform.audio) XH.Platform.audio.play(stars >= 2 ? 'victory' : 'wrong'); } catch (e) {}
+      };
+      const settle = (type, result) => finish(XH.MinigameScene.scoreStars(type, result, cfg));
+
+      // —— 各类型私有状态 ——
+      let span = 10, widx = 0, pq = { perfect: 0, good: 0, poor: 0 };            // timing
+      let rhy = null;                                                           // rhythm
+      let rt = null;                                                            // route
+      let df = null, dTimeout = 20;                                             // defend
+      let alloc = {}, aTime = 0;                                                // allocate
+      let ts = null, sub = 'ask', explain = '', subT = 0;                       // trust
+      let dg = null;                                                            // dodge
+      let du = null, press = null;                                              // dual
+      let prog = 0, holdT = 0;                                                  // finale
+
+      switch (cfg.type) {
+        case 'timing': span = cfg.windows[cfg.windows.length - 1].end + 1; break;
+        case 'rhythm': rhy = M.rhythmInit(cfg.beats); break;
+        case 'route': rt = M.routeInit(cfg.guards); break;
+        case 'defend':
+          df = M.defendInit(M.defendSchedule(cfg.waves, cfg.gap));
+          dTimeout = cfg.waves * cfg.gap + 2;
+          break;
+        case 'allocate': cfg.slots.forEach(s => { alloc[s.id] = 0; }); break;
+        case 'trust': ts = M.trustInit(cfg.rounds); break;
+        case 'dodge': dg = { lane: 1, hazards: [], hits: 0, left: cfg.hazardCount, spawnT: 0 }; break;
+        case 'dual': du = M.dualInit(); break;
+        case 'finale': break;
+      }
+
+      const confirmAlloc = () => {
+        const valid = M.allocateValid(alloc, cfg.slots, cfg.pool);
+        settle('allocate', { valid, time: aTime });
+      };
+
+      return {
+        update(dt) {
+          if (g.finished) return;
+          if (g.phase === 'result') {                 // 结算展示 0.8s 后回调
+            g.resultT += dt;
+            if (g.resultT >= 0.8) { g.finished = true; onDone(g.stars); }
+            return;
+          }
+          g.t += dt;
+          switch (cfg.type) {
+            case 'timing': {                          // 错过的窗口计 poor
+              while (widx < cfg.windows.length && g.t > cfg.windows[widx].end) { pq.poor++; widx++; }
+              if (widx >= cfg.windows.length) settle('timing', pq);
+              break;
+            }
+            case 'rhythm': {
+              if (g.t > cfg.beats[cfg.beats.length - 1] + 1) settle('rhythm', M.rhythmFinish(rhy, g.t));
+              break;
+            }
+            case 'defend': {
+              M.defendTick(df, dt);
+              if ((df.schedule.every(w => w.done) && df.pending.length === 0) || df.t > dTimeout)
+                settle('defend', M.defendFinish(df));
+              break;
+            }
+            case 'allocate': {
+              aTime += dt;
+              if (aTime >= cfg.timeLimit) settle('allocate', { valid: false, time: aTime });
+              break;
+            }
+            case 'trust': {
+              if (sub === 'explain') { subT += dt; if (subT >= 1.2) sub = 'ask'; }
+              break;
+            }
+            case 'dodge': {
+              const iv = cfg.duration / cfg.hazardCount;
+              dg.spawnT += dt;
+              while (dg.spawnT >= iv && dg.left > 0) {  // 总量 hazardCount，速度随进度加快
+                dg.spawnT -= iv; dg.left--;
+                dg.hazards.push({ lane: Math.floor(Math.random() * 3), y: -10,
+                  speed: 60 + (g.t / cfg.duration) * 90 });
+              }
+              for (const h of dg.hazards) h.y += h.speed * dt;
+              dg.hazards = dg.hazards.filter(h => h.y <= 190);
+              if (M.dodgeCollide(dg.lane, 146, 168, dg.hazards)) {
+                dg.hits++;
+                dg.hazards = dg.hazards.filter(h => !(h.lane === dg.lane && h.y >= 146 && h.y <= 168));
+              }
+              if (g.t >= cfg.duration) settle('dodge', { hits: dg.hits });
+              break;
+            }
+            case 'dual': {
+              M.dualStep(du, press, dt); press = null;  // 无按键帧 undefined，衰减照常
+              if (du.climb >= 100 || du.t >= 60) settle('dual', du);
+              break;
+            }
+            case 'finale': {
+              if (holdT > 0) { prog += dt * 40; holdT = Math.max(0, holdT - dt); }
+              else prog = Math.max(0, prog - dt * 10);
+              if (prog >= 100) { prog = 100; settle('finale', {}); }
+              break;
+            }
+          }
+        },
+
+        onInput(e) {
+          if (g.phase !== 'play') return;
+          const isTap = e.type === 'tap', isConfirm = e.type === 'key' && e.action === 'confirm';
+          switch (cfg.type) {
+            case 'timing': {
+              if ((!isTap && !isConfirm) || widx >= cfg.windows.length) return;
+              const hit = M.timingHit(g.t, [cfg.windows[widx]]);
+              if (!hit) return;                       // 未进窗口：忽略，由超时兜底
+              pq[hit[1]]++; widx++;
+              if (widx >= cfg.windows.length) settle('timing', pq);
+              break;
+            }
+            case 'rhythm':
+              if (isTap || isConfirm) M.rhythmPress(rhy, g.t, cfg.tol);
+              break;
+            case 'route': {
+              if (!isTap) return;
+              const i = Math.floor((e.x - 20) / 72);  // 4 等分渡口热区
+              if (i < 0 || i > 3 || e.y < 42 || e.y > 120 || rt.round >= cfg.guards.length) return;
+              M.routePick(rt, i);
+              if (rt.round >= cfg.guards.length) settle('route', { ok: rt.results.filter(Boolean).length });
+              break;
+            }
+            case 'defend': {
+              if (e.type !== 'key') return;
+              const dir = { up: 0, right: 1, down: 2, left: 3 }[e.action];
+              if (dir != null) M.defendIntercept(df, dir);
+              break;
+            }
+            case 'allocate': {
+              const inBtn = (x, y, bx, by) => x >= bx && x <= bx + 12 && y >= by && y <= by + 12;
+              if (isTap) {
+                for (let i = 0; i < cfg.slots.length; i++) {
+                  const s = cfg.slots[i], y = 44 + i * 32;
+                  if (inBtn(e.x, e.y, 20, y + 2)) { alloc[s.id] = Math.max(0, (alloc[s.id] || 0) - 1); return; }
+                  if (inBtn(e.x, e.y, 236, y + 2)) {
+                    let sum = 0; cfg.slots.forEach(k => { sum += alloc[k.id] || 0; });
+                    if (sum < cfg.pool) alloc[s.id] = (alloc[s.id] || 0) + 1;
+                    return;
+                  }
+                }
+                if (e.x >= 96 && e.x <= 224 && e.y >= 164 && e.y <= 178) confirmAlloc();
+              } else if (isConfirm) confirmAlloc();
+              break;
+            }
+            case 'trust': {
+              if (!isTap || sub !== 'ask') return;
+              const cur = cfg.rounds[ts.round]; if (!cur) return;
+              let positive = null;
+              if (e.x >= 36 && e.x <= 152 && e.y >= 66 && e.y <= 138) positive = true;
+              else if (e.x >= 168 && e.x <= 284 && e.y >= 66 && e.y <= 138) positive = false;
+              if (positive === null) return;
+              M.trustChoose(ts, positive);
+              if (ts.round >= cfg.rounds.length) settle('trust', ts);
+              else { explain = cur.explain || ''; sub = 'explain'; subT = 0; }
+              break;
+            }
+            case 'dodge': {
+              if (e.type === 'key' && e.action === 'left') dg.lane = Math.max(0, dg.lane - 1);
+              else if (e.type === 'key' && e.action === 'right') dg.lane = Math.min(2, dg.lane + 1);
+              else if (isTap) dg.lane = e.x < 107 ? 0 : e.x < 213 ? 1 : 2;
+              break;
+            }
+            case 'dual': {
+              if (e.type === 'key' && e.action === 'left') press = 'front';
+              else if (e.type === 'key' && e.action === 'right') press = 'climb';
+              else if (isTap) press = e.x < 160 ? 'front' : 'climb';
+              break;
+            }
+            case 'finale':
+              if (isConfirm || isTap) holdT = 1.6;    // 按住窗口内进度推进，松开回落
+              break;
+          }
+        },
+
+        draw(ctx) {
+          const P = C();
+          switch (cfg.type) {
+            case 'timing': MD.timing(ctx, { t: g.t, span, windows: cfg.windows }); break;
+            case 'rhythm': MD.rhythm(ctx, { beats: rhy.beats, hit: rhy.hit, judges: rhy.judges, now: g.t }); break;
+            case 'route': MD.route(ctx, { guards: cfg.guards, round: rt.round, results: rt.results }); break;
+            case 'defend': MD.defend(ctx, { schedule: df.schedule, pending: df.pending, t: df.t }); break;
+            case 'allocate':
+              MD.allocate(ctx, { slots: cfg.slots.map(s => Object.assign({}, s, { name: s.label })), alloc, pool: cfg.pool });
+              R.panel(ctx, 96, 164, 128, 14);
+              R.text(ctx, '确认分配', 160, 168, { size: 8, align: 'center', color: P.sparkGold });
+              break;
+            case 'trust': {
+              const cur = cfg.rounds[Math.min(ts.round, cfg.rounds.length - 1)];
+              MD.trust(ctx, { trust: ts.trust, round: ts.round, rounds: cfg.rounds.length,
+                prompt: cur.prompt, options: [cur.positive, cur.negative] });
+              if (sub === 'explain') {
+                R.panel(ctx, 40, 56, 240, 64);
+                const lines = R.wrapText(explain || '', 26);
+                lines.forEach((ln, i) => R.text(ctx, ln, 52, 68 + i * 12, { size: 8, color: P.textMain }));
+              }
+              break;
+            }
+            case 'dodge': MD.dodge(ctx, { lane: dg.lane, hazards: dg.hazards }); break;
+            case 'dual': MD.dual(ctx, { front: du.front, climb: du.climb }); break;
+            case 'finale': MD.finale(ctx, { progress: prog }); break;
+          }
+          // 顶部统一：提示条 + 计时条
+          R.px(ctx, 0, 0, 320, 13, P.inkBlack);
+          R.text(ctx, cfg.hint, 160, 3, { size: 7, align: 'center', color: P.sparkGold });
+          const ratio = clamp((() => {
+            switch (cfg.type) {
+              case 'timing': return g.t / span;
+              case 'rhythm': return g.t / (cfg.beats[cfg.beats.length - 1] + 1);
+              case 'route': return rt.results.length / 4;
+              case 'defend': return df.t / dTimeout;
+              case 'allocate': return aTime / cfg.timeLimit;
+              case 'trust': return ts.round / cfg.rounds.length;
+              case 'dodge': return g.t / cfg.duration;
+              case 'dual': return du.t / 60;
+              case 'finale': return prog / 100;
+              default: return 0;
+            }
+          })(), 0, 1);
+          R.px(ctx, 0, 13, 320, 2, P.uiPanelLight);
+          R.px(ctx, 0, 13, Math.round(320 * ratio), 2, P.torch);
+          // 结算面板：短暂展示成功/失败与星级
+          if (g.phase === 'result') {
+            R.px(ctx, 0, 0, 320, 180, 'rgba(11,14,19,0.78)');
+            R.panel(ctx, 84, 58, 152, 64);
+            R.text(ctx, g.stars >= 2 ? '成 功' : '失 败', 160, 70,
+              { size: 12, align: 'center', color: g.stars >= 2 ? P.okGreen : P.flagRed });
+            R.text(ctx, starStr(g.stars), 160, 96, { size: 12, align: 'center', color: P.sparkGold });
+          }
+        },
+      };
     },
   };
 })(globalThis.XH = globalThis.XH || {});
