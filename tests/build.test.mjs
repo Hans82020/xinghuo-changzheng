@@ -8,11 +8,11 @@ import { fileURLToPath } from 'node:url';
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
 test('build：产出 index.html，包含已存在源文件且按序排列', () => {
-  execSync('node build.mjs', { cwd: root });
+  execSync(`"${process.execPath}" build.mjs`, { cwd: root });
   const html = readFileSync(path.join(root, 'index.html'), 'utf8');
   assert.ok(html.trim().endsWith('</html>'));
   assert.ok(html.includes('<title>星火长征</title>'));
-  const order = ['palette.js']; // 后续批次追加：sprites/nodes/questions/events/mg-configs/state/save/platform/render/loop/mechanics/hud/overlays/title/march/nodeflow/report/main
+  const order = ['palette.js','sprites.js','nodes.js','questions.js','events.js'];
   let last = -1;
   for (const f of order) {
     const i = html.indexOf(`/*== ${f} ==*/`);

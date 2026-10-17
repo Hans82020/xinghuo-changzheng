@@ -14,13 +14,15 @@ const ORDER = [
 ];
 
 const parts = [];
+const skipped = [];
 for (const f of ORDER) {
   const full = path.join(root, f);
-  if (!existsSync(full)) continue;
+  if (!existsSync(full)) { skipped.push(f); continue; }
   const code = readFileSync(full, 'utf8');
   if (/<\/script/i.test(code)) throw new Error(`${f} 含有 </script，会破坏单文件结构`);
   parts.push(`/*== ${path.basename(f)} ==*/\n${code}`);
 }
+if (skipped.length) console.log('跳过缺失:\n  ' + skipped.join('\n  '));
 if (parts.length === 0) throw new Error('没有任何源文件可构建');
 
 const html = `<!doctype html>
