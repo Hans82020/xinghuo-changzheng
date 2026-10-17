@@ -111,10 +111,16 @@
     },
 
     // 问答卡：逐题作答（每题 create 时 shuffle 一次），结算回调 (right, total)
-    quiz(qs, st, onDone) {
+    quiz(qs, onDone) {
       const C = P(), R0 = R();
       const list = (qs || []).map(q => ({ q, s: XH.Overlay.shuffleOptions(q) }));
       let idx = 0, picked = -1, right = 0, closed = false;
+      const advance = () => {                                // 确认解析 → 下一题 / 结算
+        if (picked < 0) return;
+        picked = -1; idx++;
+        if (idx >= list.length) { closed = true; play('click'); popIfTop(scene); if (onDone) onDone(right, list.length); }
+        else play('click');
+      };
       const scene = {
         update() {}, areas: [],
         draw(ctx) {
@@ -131,8 +137,8 @@
             R0.panel(ctx, 28, y, 264, 18);
             let col = C.textMain;
             if (picked >= 0) {
-              if (i === cur.s.answer) { R0.px(ctx, 29, y + 1, 262, 16, 'rgba(39,174,96,0.35)'); col = C.okGreen; }
-              else if (i === picked) { R0.px(ctx, 29, y + 1, 262, 16, 'rgba(231,76,60,0.30)'); col = C.flagRed; }
+              if (i === cur.s.answer) { R0.px(ctx, 29, y + 1, 262, 16, C.okGreen); col = C.okGreen; }
+              else if (i === picked) { R0.px(ctx, 29, y + 1, 262, 16, C.flagRed); col = C.flagRed; }
             }
             R0.text(ctx, String.fromCharCode(65 + i) + '. ' + opt, 36, y + 4, { size: 8, color: col });
             scene.areas.push({ x: 28, y, w: 264, h: 18, action: 'option', index: i, correct: i === cur.s.answer });
@@ -150,16 +156,13 @@
         onInput(e) {
           if (closed) return;
           if (e.type === 'tap') {
-            if (picked >= 0) return;                            // 已作答，等 confirm
+            if (picked >= 0) { advance(); return; }             // 已作答：tap 任意位置等同 confirm
             const a = hit(scene.areas, e.x, e.y);
             if (!a || a.action !== 'option') return;
             picked = a.index;
             if (a.correct) { right++; play('correct'); } else play('wrong');
           } else if (e.type === 'key' && (e.action === 'confirm' || e.action === 'cancel')) {
-            if (picked < 0) return;
-            picked = -1; idx++;
-            if (idx >= list.length) { closed = true; play('click'); popIfTop(scene); if (onDone) onDone(right, list.length); }
-            else play('click');
+            advance();
           }
         },
       };
@@ -256,12 +259,18 @@
       return scene;
     },
 
-    // 重整旗鼓：列出已解锁节点（索引 ≤ nodeIndex 且 <14），tap 选择重新出发
+    // 重整旗鼓：列出已解锁节点（索引 ≤ nodeIndex 且 <14），方向键/点击选择重新出发
     restart(st, onPick) {
       const C = P(), R0 = R();
       const nodes = XH.NODES || [];
       const maxIdx = Math.min((st ? st.nodeIndex : 0), nodes.length - 1, 13);
-      let closed = false;
+      let sel = 0, closed = false;
+      const pick = i => {
+        if (closed || i < 0 || i > maxIdx) return;
+        closed = true; play('click'); popIfTop(scene);
+        if (onPick) onPick(i);
+      };
+      const move = d => { sel = Math.max(0, Math.min(maxIdx, sel + d)); };
       const scene = {
         update() {}, areas: [],
         draw(ctx) {
@@ -272,20 +281,27 @@
             if (i > maxIdx) return;
             const gx = 8 + (i % 2) * 156, gy = 28 + Math.floor(i / 2) * 20, en = nd.entry || {};
             R0.panel(ctx, gx, gy, 148, 18);
-            R0.text(ctx, nd.name, gx + 6, gy + 2, { size: 8, color: C.textMain });
+            if (i === sel) R0.px(ctx, gx + 1, gy + 1, 146, 16, C.uiPanelLight); // 键盘高亮
+            R0.text(ctx, nd.name, gx + 6, gy + 2, { size: 8, color: i === sel ? C.sparkGold : C.textMain });
             R0.text(ctx, '兵' + XH.HUD.fmtTroops(en.troops || 0) + ' 粮' + (en.supply || 0) + ' 气' + (en.morale || 0) + ' 民' + (en.faith || 0),
               gx + 6, gy + 10, { size: 7, color: C.textDim });
             scene.areas.push({ x: gx, y: gy, w: 148, h: 18, action: 'pick', index: i });
           });
-          R0.text(ctx, '点击节点卡重新出发', 160, 172, { size: 7, align: 'center', color: C.textDim });
+          R0.text(ctx, '方向键选择 / 回车确认 / 点击直接出发', 160, 172, { size: 7, align: 'center', color: C.textDim });
         },
         onInput(e) {
           if (closed) return;
           if (e.type === 'tap') {
             const a = hit(scene.areas, e.x, e.y);
             if (!a || a.action !== 'pick') return;
-            closed = true; play('click'); popIfTop(scene);
-            if (onPick) onPick(a.index);
+            pick(a.index);
+          } else if (e.type === 'key') {
+            if (e.action === 'left') move(-1);
+            else if (e.action === 'right') move(1);
+            else if (e.action === 'up') move(-2);
+            else if (e.action === 'down') move(2);
+            else if (e.action === 'confirm') pick(sel);
+            // cancel 键无操作（重整旗鼓不可取消）
           }
         },
       };

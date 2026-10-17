@@ -213,6 +213,7 @@
 
         draw(ctx) {
           const P = C();
+          this.areas = [];                                       // 每帧重建热区（与 overlays 契约统一）
           switch (cfg.type) {
             case 'timing': MD.timing(ctx, { t: g.t, span, windows: cfg.windows }); break;
             case 'rhythm': MD.rhythm(ctx, { beats: rhy.beats, hit: rhy.hit, judges: rhy.judges, now: g.t }); break;
@@ -227,6 +228,8 @@
               const cur = cfg.rounds[Math.min(ts.round, cfg.rounds.length - 1)];
               MD.trust(ctx, { trust: ts.trust, round: ts.round, rounds: cfg.rounds.length,
                 prompt: cur.prompt, options: [cur.positive, cur.negative] });
+              this.areas.push({ x: 36, y: 66, w: 116, h: 72, action: 'positive' },
+                { x: 168, y: 66, w: 116, h: 72, action: 'negative' });
               if (sub === 'explain') {
                 R.panel(ctx, 40, 56, 240, 64);
                 const lines = R.wrapText(explain || '', 26);
@@ -267,11 +270,6 @@
           }
         },
       };
-      // trust 选项热区暴露给测试/上层（位置与 onInput 判定一致）
-      if (cfg.type === 'trust') scene.areas = [
-        { x: 36, y: 66, w: 116, h: 72, action: 'positive' },
-        { x: 168, y: 66, w: 116, h: 72, action: 'negative' },
-      ];
       return scene;
     },
   };

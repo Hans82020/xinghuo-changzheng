@@ -58,7 +58,7 @@ test('trust 型（mg04）：连点正确选项 3 轮回调一次且 3 星', () =
   const { MinigameScene, NODES } = boot();
   let calls = 0, stars = -1;
   const scene = MinigameScene.create(NODES[3], { seed: 7 }, s => { calls++; stars = s; });
-  scene.draw(mockCtx);                                        // 先绘制以暴露热区
+  scene.draw(mockCtx);                                        // draw 时重建热区，绘制后 areas 才可用
   const area = scene.areas.find(a => a.action === 'positive');
   assert.ok(area, 'trust 场景需把按钮热区暴露到 scene.areas');
   for (let i = 0; i < 3; i++) {
