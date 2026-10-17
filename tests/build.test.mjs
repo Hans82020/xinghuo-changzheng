@@ -12,7 +12,7 @@ test('build：产出 index.html，包含已存在源文件且按序排列', () =
   const html = readFileSync(path.join(root, 'index.html'), 'utf8');
   assert.ok(html.trim().endsWith('</html>'));
   assert.ok(html.includes('<title>星火长征</title>'));
-  const order = ['palette.js','sprites.js','nodes.js','questions.js','events.js','state.js','save.js','platform.js','render.js','loop.js'];
+  const order = ['palette.js','sprites.js','nodes.js','questions.js','events.js','state.js','save.js','platform.js','render.js','loop.js','mechanics.js'];
   let last = -1;
   for (const f of order) {
     const i = html.indexOf(`/*== ${f} ==*/`);
