@@ -85,6 +85,9 @@ canvas{image-rendering:pixelated;image-rendering:crisp-edges;touch-action:none}
         '第五次反"围剿"失利后，中央红军被迫实行战略转移，八万六千余人在于都河畔集结，踏上漫漫长征路。',
         '为了让红军顺利渡河，三十万于都人民齐心协力保守出渡秘密，拆门板、捐寿材，连夜架设浮桥。'],
       emotion:{ title:'一河门板', text:'百姓拆门板、捐寿材搭浮桥，一河门板托起红军的希望，也托起军民鱼水情深的信任。', tag:'史实' },
+      dialog:[
+        { who:'老乡', line:'门板拆去搭桥，寿材也抬来了。红军回来那天，再给我们装上。' },
+        { who:'周恩来', line:'于都人民真好，苏区人民真亲。各家的门板都记下，将来一块块还。' } ],
       choice:{ prompt:'渡河在即，如何安排过河时机？', options:[
         O('严格灯火管制，夜间隐蔽急渡', {troops:0,supply:0,morale:4,faith:0}, '夜色掩护下安全渡河，保存了实力', true),
         O('白天大张旗鼓列队渡河', {troops:-2000,supply:0,morale:-6,faith:0}, '暴露目标遭敌机空袭，损失惨重') ] },
@@ -98,6 +101,9 @@ canvas{image-rendering:pixelated;image-rendering:crisp-edges;touch-action:none}
         '红军连续突破国民党军三道封锁线，向湘西方向挺进，一路宣传群众、播撒革命火种。',
         '在湖南汝城沙洲村，三名女红军借宿徐解秀家，临行前剪下自己仅有的半条被子留给老人。'],
       emotion:{ title:'半条被子', text:'三名女红军剪被留徐解秀，"自己有一条被子，也要剪下半条给老百姓"，半条被子温暖了一代人。', tag:'史实' },
+      dialog:[
+        { who:'女红军', line:'大嫂，天冷，这半条被子你留着。等革命胜利了，我们回来看你。' },
+        { who:'徐解秀', line:'什么是共产党？就是自己只有一条被子，也要剪下半条给老百姓的人。' } ],
       choice:{ prompt:'部队行至村寨，如何安排宿营？', options:[
         O('露宿屋檐下，绝不扰民', {troops:0,supply:0,morale:0,faith:8}, '严守纪律，赢得群众真心拥护', true),
         O('征用民房生火取暖', {troops:0,supply:0,morale:0,faith:-8}, '惊扰百姓，损害军民关系') ] },
@@ -111,6 +117,9 @@ canvas{image-rendering:pixelated;image-rendering:crisp-edges;touch-action:none}
         '湘江战役是长征中最惨烈的一战，红军八万六千余人血战后锐减至三万余人，鲜血染红了湘江水。',
         '红三十四师奉命殿后掩护主力渡江，师长陈树湘重伤被俘，绞断肠子壮烈殉职，少共国际师战士平均年仅十八岁。'],
       emotion:{ title:'断肠明志', text:'陈树湘重伤被俘，绞断肠子殉职，"为苏维埃新中国流尽最后一滴血"，以生命践行誓言。', tag:'史实' },
+      dialog:[
+        { who:'陈树湘', line:'主力过江要紧。三十四师就算打光了，也要顶住，掩护主力过江！' },
+        { who:'陈树湘', line:'我为苏维埃新中国，流尽最后一滴血。' } ],
       choice:{ prompt:'敌重兵压境，如何掩护主力渡江？', options:[
         O('红三十四师死守殿后掩护主力', {troops:-6000,supply:0,morale:6,faith:0}, '以局部牺牲换取主力安全，士气大振', true),
         O('全军挤渡抢时间', {troops:-9000,supply:0,morale:-8,faith:0}, '秩序混乱遭敌截击，损失更为惨重') ] },
@@ -124,6 +133,9 @@ canvas{image-rendering:pixelated;image-rendering:crisp-edges;touch-action:none}
         '湘江战役后，若按原计划北上湘西，红军将钻入敌二十万重兵预设的口袋，后果不堪设想。',
         '通道会议上，毛泽东力主放弃北上计划，转兵敌人力量薄弱的贵州，这一转弯挽救了三万红军。'],
       emotion:{ title:'一次转弯挽救三万人', text:'通道转兵避开了敌二十万重兵口袋，一次战略方向的转弯，挽救了三万红军的命运。', tag:'史实' },
+      dialog:[
+        { who:'毛泽东', line:'北上湘西，正好钻进二十万人的口袋。贵州的敌人最弱——转兵，往贵州走。' },
+        { who:'周恩来', line:'我赞成润之同志的意见。西进贵州，渡过乌江，避开重兵。' } ],
       choice:{ prompt:'面临敌重兵口袋，部队该向何处去？', options:[
         O('采纳毛泽东建议，转兵贵州', {troops:0,supply:0,morale:8,faith:0}, '避实就虚，跳出敌包围圈', true),
         O('坚持原计划北上湘西', {troops:0,supply:0,morale:-10,faith:0}, '正中敌预设口袋，全军覆没之险') ] },
@@ -137,6 +149,9 @@ canvas{image-rendering:pixelated;image-rendering:crisp-edges;touch-action:none}
         '1935年1月15日至17日，中共中央政治局在遵义召开扩大会议，集中全力解决军事和组织问题。',
         '会议结束了"左"倾教条主义错误军事路线，确立了毛泽东在党中央和红军的领导地位，是生死攸关的转折点。'],
       emotion:{ title:'生死攸关的转折', text:'遵义小楼长夜三天，确立了毛泽东在党和红军的领导地位，是中国革命生死攸关的伟大转折。', tag:'史实' },
+      dialog:[
+        { who:'毛泽东', line:'仗不能再这么打了。硬拼消耗，拼掉的不是敌人，是红军的命。' },
+        { who:'周恩来', line:'该改了。军事指挥，要交给打得赢仗的人。' } ],
       choice:{ prompt:'遵义会议作出关键抉择，下一步如何指挥？', options:[
         O('结束错误军事指挥，毛泽东进入常委', {troops:0,supply:0,morale:10,faith:0}, '正确路线确立，全军重获信心', true),
         O('仍由原指挥线继续指挥', {troops:0,supply:0,morale:-8,faith:0}, '错误路线延续，红军前途堪忧') ] },
@@ -150,6 +165,9 @@ canvas{image-rendering:pixelated;image-rendering:crisp-edges;touch-action:none}
         '遵义会议后，面对国民党四十万大军围追堵截，仅三万余人的红军在赤水河流域四次渡河，巧妙调动敌军。',
         '毛泽东声东击西、避实就虚，使红军在运动中摆脱重兵围剿，这是他军事生涯中的"得意之笔"。'],
       emotion:{ title:'得意之笔', text:'四渡赤水是毛泽东军事生涯的"得意之笔"，三万对四十万，灵活机动调动敌军于股掌之间。', tag:'史实' },
+      dialog:[
+        { who:'毛泽东', line:'四十万围我们三万，那就带着他们跑。声东击西，往空虚处走。' },
+        { who:'朱德', line:'三渡把敌人主力调去川南，我们掉头四渡，南下直插贵阳！' } ],
       choice:{ prompt:'面对十倍于己之敌，如何破局？', options:[
         O('声东击西，灵活机动', {troops:0,supply:0,morale:8,faith:0}, '调动敌军，在运动中歼敌突围', true),
         O('固守一地与敌硬拼', {troops:-3000,supply:0,morale:-6,faith:0}, '寡不敌众，陷入被动挨打') ] },
@@ -163,6 +181,9 @@ canvas{image-rendering:pixelated;image-rendering:crisp-edges;touch-action:none}
         '红军在云南皎平渡找到七只小船，依靠三十七名船工，历经九天九夜将三万大军全部渡过金沙江。',
         '船工们人歇船不歇，红军严守纪律、优待船工，"金沙水拍云崖暖"，胜利跳出数十万敌军的包围圈。'],
       emotion:{ title:'金沙水拍云崖暖', text:'皎平渡七只小船、三十七名船工，九天九夜渡过三万大军，船工人歇船不歇，军民同心。', tag:'史实' },
+      dialog:[
+        { who:'老船工', line:'红军给现大洋、管饭吃，人歇船不歇——这一江，我们撑定了！' },
+        { who:'红军干部', line:'七只船，三十七位师傅。请乡亲们放心，工钱一天不欠。' } ],
       choice:{ prompt:'渡江需要船工助力，如何对待他们？', options:[
         O('优待船工，轮班摆渡', {troops:0,supply:0,morale:6,faith:6}, '船工全力相助，大军顺利渡江', true),
         O('强征民船，强迫服役', {troops:0,supply:0,morale:0,faith:-6}, '失去民心，船工消极怠工') ] },
@@ -176,6 +197,9 @@ canvas{image-rendering:pixelated;image-rendering:crisp-edges;touch-action:none}
         '红军进入彝区后，总参谋长刘伯承与彝族果基家支首领小叶丹在彝海边歃血为盟，结为兄弟。',
         '小叶丹护送红军顺利通过彝区，此后数年一直珍藏结盟红旗，1942年遇难前嘱托妻子将红旗交还红军。'],
       emotion:{ title:'彝海结盟', text:'刘伯承与小叶丹歃血为盟，小叶丹护旗数年，遇难前嘱妻将红旗交还红军，民族团结的丰碑。', tag:'史实' },
+      dialog:[
+        { who:'小叶丹', line:'红军不抢彝人、讲义气。我果基家支，愿与刘司令歃血结盟！' },
+        { who:'刘伯承', line:'彝汉是一家。喝了这碗血酒，红军与果基家支，生死与共。' } ],
       choice:{ prompt:'进入彝区，如何处理民族关系？', options:[
         O('尊重彝俗，真诚结盟', {troops:0,supply:0,morale:0,faith:10}, '民族团结，顺利通过彝区', true),
         O('武力闯关开路', {troops:-2000,supply:0,morale:0,faith:-10}, '激化矛盾，伤亡惨重失民心') ] },
@@ -189,6 +213,9 @@ canvas{image-rendering:pixelated;image-rendering:crisp-edges;touch-action:none}
         '1935年5月24日至25日，红军在安顺场发起强渡，十七勇士乘小船冒着枪林弹雨突破大渡河天险。',
         '勇士们在惊涛骇浪中奋勇向前，为红军北上打开了通道，"浪尖上的冲锋号"响彻大渡河两岸。'],
       emotion:{ title:'浪尖上的冲锋号', text:'安顺场十七勇士乘船突破大渡河天险，浪尖上的冲锋号，奏响了红军不怕牺牲的壮歌。', tag:'史实' },
+      dialog:[
+        { who:'营长', line:'就这一条船，也要撕开对岸的口子。十七个人，跟我上船！' },
+        { who:'勇士', line:'号响就冲！浪再大，船头也不许掉回来！' } ],
       choice:{ prompt:'大渡河天险当前，如何突破？', options:[
         O('夺取安顺场船只，组织夜渡', {troops:0,supply:0,morale:6,faith:0}, '十七勇士强渡成功，打开通路', true),
         O('等后续部队造船再渡', {troops:-2500,supply:0,morale:0,faith:0}, '贻误战机，敌军赶到合围') ] },
@@ -202,6 +229,9 @@ canvas{image-rendering:pixelated;image-rendering:crisp-edges;touch-action:none}
         '红四团接到命令后，一昼夜急行军二百四十里，赶在敌援军之前到达泸定桥。',
         '二十二名勇士攀着十三根铁索，冒着对岸敌军的枪林弹雨冲向桥头，敌军惊呼"你们是飞过来的吧"。'],
       emotion:{ title:'飞夺泸定桥', text:'红四团一昼夜二百四十里，二十二勇士攀十三根铁索夺桥，勇士们大多连名字都没留下。', tag:'史实' },
+      dialog:[
+        { who:'杨成武', line:'一昼夜，二百四十里——敌援军还在睡觉，我们要"飞"到泸定桥！' },
+        { who:'勇士', line:'铁索滑、对岸有火也照夺！同志们，攀索过桥！' } ],
       choice:{ prompt:'敌援军将至，如何夺取泸定桥？', options:[
         O('昼夜奔袭，抢在敌援之前', {troops:0,supply:0,morale:8,faith:0}, '神速奔袭，二十二勇士夺桥成功', true),
         O('休整一夜次日再进', {troops:-1500,supply:0,morale:-6,faith:0}, '敌援赶到，夺桥代价剧增') ] },
@@ -215,6 +245,9 @@ canvas{image-rendering:pixelated;image-rendering:crisp-edges;touch-action:none}
         '夹金山是红军长征翻越的第一座大雪山，海拔四千余米，红军战士身着单衣草鞋，顶着风雪严寒攀登。',
         '许多战士把仅有的棉衣让给战友，自己却冻僵在雪山上，化作风雪中屹立的"丰碑"。'],
       emotion:{ title:'风雪中的丰碑', text:'风雪中，把棉衣让给战友的人冻立成"丰碑"，单衣草鞋翻雪山，战友之情比山高。', tag:'经典故事' },
+      dialog:[
+        { who:'老班长', line:'棉衣你披上，我这把骨头扛得住。结组手拉紧，山上不准停步。' },
+        { who:'小战士', line:'班长……到了陕北，我给你写信。' } ],
       choice:{ prompt:'翻越雪山，如何组织行进？', options:[
         O('结组互助，互相搀扶翻山', {troops:0,supply:0,morale:6,faith:0}, '团结互助，减少冻伤减员', true),
         O('分散快速冲坡', {troops:-800,supply:0,morale:-6,faith:0}, '体力不支掉队，冻伤增多') ] },
@@ -228,6 +261,9 @@ canvas{image-rendering:pixelated;image-rendering:crisp-edges;touch-action:none}
         '松潘草地一望无际，泥沼遍布、气候恶劣，红军粮绝衣单，陷入极端困境，减员巨大。',
         '《金色的鱼钩》中，老班长用缝衣针做鱼钩钓鱼给伤员吃，自己却嚼鱼骨充饥，最终牺牲在草地上。'],
       emotion:{ title:'金色的鱼钩', text:'老班长用缝衣针做钩钓鱼给伤员，自己嚼鱼骨，金色的鱼钩闪耀着共产党人无私奉献的光芒。', tag:'经典故事' },
+      dialog:[
+        { who:'小战士', line:'老班长，鱼都留给我们，你自己吃什么？' },
+        { who:'老班长', line:'我早吃过了。你们身子骨金贵——走出草地，路还长着呢。' } ],
       choice:{ prompt:'草地粮绝，如何分配有限给养？', options:[
         O('伤员优先，官兵一致', {troops:0,supply:0,morale:8,faith:0}, '同甘共苦，凝聚队伍斗志', true),
         O('干部先走，留下弱者', {troops:-600,supply:0,morale:-10,faith:0}, '军心涣散，队伍失去凝聚力') ] },
@@ -241,6 +277,9 @@ canvas{image-rendering:pixelated;image-rendering:crisp-edges;touch-action:none}
         '腊子口是川西北通往甘南的天险隘口，两面绝壁夹一线，正面强攻屡屡受挫。',
         '一名外号"云贵川"的苗族小战士主动请缨，带人攀上绝壁从侧后奇袭，一举突破天险。'],
       emotion:{ title:'攀上绝壁的小战士', text:'外号"云贵川"的苗族小战士带人攀上崖顶奇袭，正面佯攻配合，一举拿下天险腊子口。', tag:'史实' },
+      dialog:[
+        { who:'云贵川', line:'我是山里采药的，这样的崖壁攀得住。给我一颗手榴弹，带路！' },
+        { who:'团长', line:'好！正面继续强攻，把敌人的眼睛钉死——攀崖的事，交给他！' } ],
       choice:{ prompt:'天险正面不下，如何破敌？', options:[
         O('正面佯攻，侧后攀崖奇袭', {troops:0,supply:0,morale:8,faith:0}, '出其不意，突破天险', true),
         O('全线反复正面强冲', {troops:-2000,supply:0,morale:-6,faith:0}, '徒增伤亡，久攻不下') ] },
@@ -254,6 +293,9 @@ canvas{image-rendering:pixelated;image-rendering:crisp-edges;touch-action:none}
         '1935年10月19日，中央红军抵达陕北吴起镇，完成了历时一年的战略转移。',
         '1936年10月，红一、红二、红四方面军在甘肃会宁胜利会师，红军纵横十余省，行程二万五千里。'],
       emotion:{ title:'星星之火，可以燎原', text:'出发八万六千，会师余部锐减，人数对比令人动容；但星星之火可以燎原，革命的火种终成燎原之势。', tag:'史实' },
+      dialog:[
+        { who:'战士', line:'会师了！二万五千里，我们一步一步走下来了！' },
+        { who:'朱德', line:'记住这条路上的名字。往前的路还长，可再没人挡得住这支队伍了。' } ],
       choice:{ prompt:'三大主力会师，下一步何去何从？', options:[
         O('会师整训，开赴抗日前线', {troops:0,supply:0,morale:10,faith:0}, '保存革命力量，迎接抗日新高潮', true) ] },
       quiz:'n14', mg:'mg14',
@@ -409,7 +451,7 @@ canvas{image-rendering:pixelated;image-rendering:crisp-edges;touch-action:none}
       windows: [{ start: 1.5, end: 2.4 }, { start: 4.4, end: 5.3 }, { start: 7.4, end: 8.3 }, { start: 10.4, end: 11.3 }] },
 
     // n03 湘江战役：殿后死守（红34师）
-    mg03: { type: 'defend', hint: '红34师殿后——守住每一波冲锋！', guide: '按 ↑→↓← 方向键拦截冲锋；触屏点四角对应方向（左上↑ 右上→ 右下↓ 左下←）', waves: 6, gap: 2.5, hitLoss: 800 },
+    mg03: { type: 'defend', hint: '红34师殿后——守住每一波冲锋！', guide: '按 ↑→↓← 方向键拦截冲锋；触屏/鼠标直接点击来敌（点在敌人身上即可拦住）', waves: 6, gap: 2.5, hitLoss: 800 },
 
     // n04 通道转兵：转兵决策
     mg04: { type: 'trust', hint: '危急关头，每一次决断都在校准航向！', guide: '点击左 / 右两张选项卡，做出你的决断', rounds: [
@@ -952,6 +994,12 @@ canvas{image-rendering:pixelated;image-rendering:crisp-edges;touch-action:none}
   const starStr = n => '★'.repeat(n) + '☆'.repeat(3 - n);
 
   XH.MinigameScene = {
+    // 触点方向（纯函数）：以帅帐(160,88)为原点取主轴——点在来敌身上（上/右/下/左正方向）即拦截对应方向
+    tapDir(x, y) {
+      const dx = x - 160, dy = y - 88;
+      return Math.abs(dx) >= Math.abs(dy) ? (dx >= 0 ? 1 : 3) : (dy >= 0 ? 2 : 0);
+    },
+
     // 结算星级映射（纯函数）：timing/dodge 按比例，rhythm/route/defend/trust/dual 直通 Mech 规则
     scoreStars(type, result, cfg) {
       const M = XH.Mech, r = result || {};
@@ -1114,7 +1162,7 @@ canvas{image-rendering:pixelated;image-rendering:crisp-edges;touch-action:none}
             case 'defend': {
               let dir = -1;
               if (e.type === 'key') dir = { up: 0, right: 1, down: 2, left: 3 }[e.action] ?? -1;
-              else if (isTap) dir = e.y < 90 ? (e.x < 160 ? 0 : 1) : (e.x < 160 ? 3 : 2);  // 触屏四象限：左上↑ 右上→ 右下↓ 左下←
+              else if (isTap) dir = XH.MinigameScene.tapDir(e.x, e.y);  // 点在来敌身上即拦截（主轴映射）
               if (dir >= 0) M.defendIntercept(df, dir);
               break;
             }
@@ -1292,6 +1340,15 @@ canvas{image-rendering:pixelated;image-rendering:crisp-edges;touch-action:none}
   const fmtDelta = v => (v > 0 ? '+' : v < 0 ? '-' : '') + (Math.abs(v) >= 10000 ? XH.HUD.fmtTroops(Math.abs(v)) : Math.abs(v));
   const effText = eff => Object.keys(RES).filter(k => eff && eff[k]).map(k => RES[k] + fmtDelta(eff[k])).join(' ');
 
+  // 人物固定配色（类配音定妆：同一人物全程同色，增强代入感）
+  const WHO_COLOR = {
+    '毛泽东': 'flagRed', '周恩来': 'sparkGold', '朱德': 'warnOrange', '刘伯承': 'water', '杨成武': 'okGreen',
+    '陈树湘': 'redStar', '小叶丹': 'loessDark', '徐解秀': 'loess', '老乡': 'loess', '老船工': 'loess',
+    '老班长': 'grassLand', '小战士': 'snow', '女红军': 'flagRed', '红军干部': 'uniformGray',
+    '营长': 'uniformDark', '勇士': 'redStar', '团长': 'okGreen', '战士': 'cloudWhite', '云贵川': 'torch',
+  };
+  const whoCol = who => { const C = P(); return C[WHO_COLOR[who]] || C.textMain; };
+
   XH.Overlay = {
     // 打乱选项：Fisher-Yates，不改原数组；answer 为正确项在新数组中的下标
     shuffleOptions(q, rng) {
@@ -1331,6 +1388,40 @@ canvas{image-rendering:pixelated;image-rendering:crisp-edges;touch-action:none}
           if (e.type !== 'tap' && !(e.type === 'key' && (e.action === 'confirm' || e.action === 'cancel'))) return;
           closed = true; play('click'); popIfTop(scene);
           if (onDone) onDone();
+        },
+      };
+      return scene;
+    },
+
+    // 对话卡：节点人物对话逐句展示（who 配色固定），tap/confirm 逐句推进，完结 pop 并回调
+    dialog(lines, onDone) {
+      const C = P(), R0 = R();
+      let idx = 0, closed = false;
+      const advance = () => {
+        idx++;
+        if (idx >= lines.length) { closed = true; play('click'); popIfTop(scene); if (onDone) onDone(); }
+        else play('click');
+      };
+      const scene = {
+        update() {}, areas: [],
+        draw(ctx) {
+          R0.px(ctx, 0, 0, 320, 180, C.inkBlack);
+          const d = lines[idx] || { who: '', line: '' };
+          const col = whoCol(d.who);
+          R0.px(ctx, 40, 44, 24, 24, col);                     // 头像块：人物色 + 名字首字
+          R0.text(ctx, (d.who || '？')[0], 52, 50, { size: 10, align: 'center', color: C.inkBlack });
+          R0.text(ctx, d.who, 74, 48, { size: 10, color: col });
+          R0.text(ctx, (idx + 1) + ' / ' + lines.length, 280, 49, { size: 7, align: 'right', color: C.textDim });
+          R0.panel(ctx, 24, 84, 272, 56);                      // 对话框
+          let y = 96;
+          for (const ln of R0.wrapText(d.line || '', 26)) { R0.text(ctx, ln, 36, y, { size: 8, color: C.textMain }); y += 11; }
+          R0.text(ctx, idx < lines.length - 1 ? '▼' : '—', 280, 126, { size: 8, align: 'right', color: C.sparkGold });
+          R0.text(ctx, '回车 / 点击 继续', 160, 168, { size: 7, align: 'center', color: C.textDim });
+        },
+        onInput(e) {
+          if (closed) return;
+          if (e.type !== 'tap' && !(e.type === 'key' && (e.action === 'confirm' || e.action === 'cancel'))) return;
+          advance();
         },
       };
       return scene;
@@ -1758,7 +1849,7 @@ canvas{image-rendering:pixelated;image-rendering:crisp-edges;touch-action:none}
 
     start(st, node) {
       XH.State.beginNode(st, node);
-      XH.Loop.push(XH.Overlay.story(node, () => {
+      const toChoice = () => {
         XH.Loop.push(XH.Overlay.choice(node, opt => {
           XH.NodeFlow.applyEffects(st, opt.effects);
           const qs = XH.QUESTIONS.filter(q => q.nodeId === node.id);
@@ -1768,6 +1859,12 @@ canvas{image-rendering:pixelated;image-rendering:crisp-edges;touch-action:none}
               stars => XH.NodeFlow.finishMg(st, node, stars)));
           }));
         }));
+      };
+      XH.Loop.push(XH.Overlay.story(node, () => {
+        // 人物对话：story 确认后逐句展示，完结再进抉择（缺省/空对话直接进抉择）
+        const lines = (node.dialog || []).filter(d => d && d.who && d.line);
+        if (lines.length) XH.Loop.push(XH.Overlay.dialog(lines, toChoice));
+        else toChoice();
       }));
     },
 

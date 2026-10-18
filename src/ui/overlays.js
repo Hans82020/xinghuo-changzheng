@@ -13,6 +13,15 @@
   const fmtDelta = v => (v > 0 ? '+' : v < 0 ? '-' : '') + (Math.abs(v) >= 10000 ? XH.HUD.fmtTroops(Math.abs(v)) : Math.abs(v));
   const effText = eff => Object.keys(RES).filter(k => eff && eff[k]).map(k => RES[k] + fmtDelta(eff[k])).join(' ');
 
+  // 人物固定配色（类配音定妆：同一人物全程同色，增强代入感）
+  const WHO_COLOR = {
+    '毛泽东': 'flagRed', '周恩来': 'sparkGold', '朱德': 'warnOrange', '刘伯承': 'water', '杨成武': 'okGreen',
+    '陈树湘': 'redStar', '小叶丹': 'loessDark', '徐解秀': 'loess', '老乡': 'loess', '老船工': 'loess',
+    '老班长': 'grassLand', '小战士': 'snow', '女红军': 'flagRed', '红军干部': 'uniformGray',
+    '营长': 'uniformDark', '勇士': 'redStar', '团长': 'okGreen', '战士': 'cloudWhite', '云贵川': 'torch',
+  };
+  const whoCol = who => { const C = P(); return C[WHO_COLOR[who]] || C.textMain; };
+
   XH.Overlay = {
     // 打乱选项：Fisher-Yates，不改原数组；answer 为正确项在新数组中的下标
     shuffleOptions(q, rng) {
@@ -52,6 +61,40 @@
           if (e.type !== 'tap' && !(e.type === 'key' && (e.action === 'confirm' || e.action === 'cancel'))) return;
           closed = true; play('click'); popIfTop(scene);
           if (onDone) onDone();
+        },
+      };
+      return scene;
+    },
+
+    // 对话卡：节点人物对话逐句展示（who 配色固定），tap/confirm 逐句推进，完结 pop 并回调
+    dialog(lines, onDone) {
+      const C = P(), R0 = R();
+      let idx = 0, closed = false;
+      const advance = () => {
+        idx++;
+        if (idx >= lines.length) { closed = true; play('click'); popIfTop(scene); if (onDone) onDone(); }
+        else play('click');
+      };
+      const scene = {
+        update() {}, areas: [],
+        draw(ctx) {
+          R0.px(ctx, 0, 0, 320, 180, C.inkBlack);
+          const d = lines[idx] || { who: '', line: '' };
+          const col = whoCol(d.who);
+          R0.px(ctx, 40, 44, 24, 24, col);                     // 头像块：人物色 + 名字首字
+          R0.text(ctx, (d.who || '？')[0], 52, 50, { size: 10, align: 'center', color: C.inkBlack });
+          R0.text(ctx, d.who, 74, 48, { size: 10, color: col });
+          R0.text(ctx, (idx + 1) + ' / ' + lines.length, 280, 49, { size: 7, align: 'right', color: C.textDim });
+          R0.panel(ctx, 24, 84, 272, 56);                      // 对话框
+          let y = 96;
+          for (const ln of R0.wrapText(d.line || '', 26)) { R0.text(ctx, ln, 36, y, { size: 8, color: C.textMain }); y += 11; }
+          R0.text(ctx, idx < lines.length - 1 ? '▼' : '—', 280, 126, { size: 8, align: 'right', color: C.sparkGold });
+          R0.text(ctx, '回车 / 点击 继续', 160, 168, { size: 7, align: 'center', color: C.textDim });
+        },
+        onInput(e) {
+          if (closed) return;
+          if (e.type !== 'tap' && !(e.type === 'key' && (e.action === 'confirm' || e.action === 'cancel'))) return;
+          advance();
         },
       };
       return scene;

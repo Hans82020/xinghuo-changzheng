@@ -4,6 +4,12 @@
   const starStr = n => '★'.repeat(n) + '☆'.repeat(3 - n);
 
   XH.MinigameScene = {
+    // 触点方向（纯函数）：以帅帐(160,88)为原点取主轴——点在来敌身上（上/右/下/左正方向）即拦截对应方向
+    tapDir(x, y) {
+      const dx = x - 160, dy = y - 88;
+      return Math.abs(dx) >= Math.abs(dy) ? (dx >= 0 ? 1 : 3) : (dy >= 0 ? 2 : 0);
+    },
+
     // 结算星级映射（纯函数）：timing/dodge 按比例，rhythm/route/defend/trust/dual 直通 Mech 规则
     scoreStars(type, result, cfg) {
       const M = XH.Mech, r = result || {};
@@ -166,7 +172,7 @@
             case 'defend': {
               let dir = -1;
               if (e.type === 'key') dir = { up: 0, right: 1, down: 2, left: 3 }[e.action] ?? -1;
-              else if (isTap) dir = e.y < 90 ? (e.x < 160 ? 0 : 1) : (e.x < 160 ? 3 : 2);  // 触屏四象限：左上↑ 右上→ 右下↓ 左下←
+              else if (isTap) dir = XH.MinigameScene.tapDir(e.x, e.y);  // 点在来敌身上即拦截（主轴映射）
               if (dir >= 0) M.defendIntercept(df, dir);
               break;
             }

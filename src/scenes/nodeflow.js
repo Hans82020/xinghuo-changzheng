@@ -32,7 +32,7 @@
 
     start(st, node) {
       XH.State.beginNode(st, node);
-      XH.Loop.push(XH.Overlay.story(node, () => {
+      const toChoice = () => {
         XH.Loop.push(XH.Overlay.choice(node, opt => {
           XH.NodeFlow.applyEffects(st, opt.effects);
           const qs = XH.QUESTIONS.filter(q => q.nodeId === node.id);
@@ -42,6 +42,12 @@
               stars => XH.NodeFlow.finishMg(st, node, stars)));
           }));
         }));
+      };
+      XH.Loop.push(XH.Overlay.story(node, () => {
+        // 人物对话：story 确认后逐句展示，完结再进抉择（缺省/空对话直接进抉择）
+        const lines = (node.dialog || []).filter(d => d && d.who && d.line);
+        if (lines.length) XH.Loop.push(XH.Overlay.dialog(lines, toChoice));
+        else toChoice();
       }));
     },
 

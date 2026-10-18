@@ -141,9 +141,11 @@ test('march：n03（湘江）到达先弹减员提示卡，确认后进入 n03 �
   Loop.top().onInput({ type: 'key', action: 'confirm' });        // 减员卡确认
   assert.equal(Loop.stack.length, 2, '确认后进入 n03 流程（栈顶仍是 story）');
   assert.equal(st.troops, NODES[2].entry.troops + (st.lastBonus || 0), 'n03 beginNode 生效');
-  Loop.top().onInput({ type: 'key', action: 'confirm' });        // n03 剧情卡确认
+  Loop.top().onInput({ type: 'key', action: 'confirm' });        // n03 剧情卡确认 → 人物对话
+  for (let i = 0; i < NODES[2].dialog.length; i++)
+    Loop.top().onInput({ type: 'key', action: 'confirm' });      // 对话逐句推进
   Loop.top().draw(mockCtx);
-  assert.ok(Array.isArray(Loop.top().areas), '下一层应为 choice（有热区）');
+  assert.ok(Array.isArray(Loop.top().areas), '对话完结后应为 choice（有热区）');
 });
 
 test('march：resync——节点完成回 march 后一帧重同步，不重复进入上一节点流程', () => {
@@ -159,7 +161,9 @@ test('march：resync——节点完成回 march 后一帧重同步，不重复�
   assert.equal(Loop.stack.length, 1, '无 story/choice 压入（不重复进入上一节点流程）');
   driveEvents(m, st, 2);                                          // 重同步后向新节点行军，途中事件照常
   assert.ok(driveToStory(m, st), '抵达新节点应进入其节点流程 story');
-  Loop.top().onInput({ type: 'key', action: 'confirm' });         // 关 story → choice
+  Loop.top().onInput({ type: 'key', action: 'confirm' });         // 关 story → 人物对话
+  for (let i = 0; i < NODES[1].dialog.length; i++)
+    Loop.top().onInput({ type: 'key', action: 'confirm' });       // 对话推进完 → choice
   Loop.top().draw(mockCtx);
   assert.deepEqual(Loop.top().areas.map(a => a.option.label),
     NODES[1].choice.options.map(o => o.label), '进入的是 NODES[1]（新节点）而非上一节点的流程');
@@ -174,9 +178,14 @@ test('nodeflow.start：story→choice→quiz→minigame 逐级推进，quiz 用 
   NodeFlow.start(st, NODES[0]);
   assert.equal(st.troops, NODES[0].entry.troops, 'beginNode 生效');
   assert.equal(Loop.stack.length, 2, '栈 = 假底层 + story');
-  Loop.top().onInput({ type: 'key', action: 'confirm' });
+  Loop.top().onInput({ type: 'key', action: 'confirm' });         // story 确认 → 人物对话
   Loop.top().draw(mockCtx);
-  assert.ok(Array.isArray(Loop.top().areas), 'story 确认后应进入 choice');
+  assert.equal(Loop.stack.length, 2, 'story 后进入对话（栈高不变）');
+  assert.ok(Loop.top().areas && Loop.top().areas.length === 0, '对话卡无热区（区别于 choice）');
+  for (let i = 0; i < NODES[0].dialog.length; i++)
+    Loop.top().onInput({ type: 'key', action: 'confirm' });       // 对话逐句推进至完结
+  Loop.top().draw(mockCtx);
+  assert.ok(Array.isArray(Loop.top().areas) && Loop.top().areas.length, '对话完结后应进入 choice');
   assert.equal(Loop.stack.length, 2);
   confirmChoice(Loop.top());                                      // 选选项 0（n01 正确项 morale+4）
   assert.equal(st.morale, NODES[0].entry.morale + 4, 'choice effects 由 NodeFlow.applyDelta 应用');
@@ -278,9 +287,28 @@ test('__jump(m)：新建 State 直接进入第 m 个节点流程', () => {
   assert.equal(st.troops, NODES[3].entry.troops, 'beginNode 已生效');
   assert.equal(Loop.stack.length, 2, '栈 = march 底 + story');
   assert.equal(Loop.stack[0].name, 'march', '栈底为 march（流程结束后可回）');
-  Loop.top().onInput({ type: 'key', action: 'confirm' });
+  Loop.top().onInput({ type: 'key', action: 'confirm' });         // story → 人物对话
+  for (let i = 0; i < NODES[3].dialog.length; i++)
+    Loop.top().onInput({ type: 'key', action: 'confirm' });       // 对话推进完 → choice
   Loop.top().draw(mockCtx);
-  assert.ok(Array.isArray(Loop.top().areas), 'story 确认后进入 choice');
+  assert.ok(Array.isArray(Loop.top().areas), '对话完结后进入 choice');
+});
+
+test('dialog：逐句推进、完结 pop 并回调一次', () => {
+  const { Overlay } = boot();
+  const Loop = xh().Loop;
+  Loop.stack.length = 0;
+  let done = 0;
+  const lines = [{ who: '毛泽东', line: '声东击西，往空虚处走。' }, { who: '朱德', line: '三渡调敌，回头四渡，南下贵阳！' }];
+  Loop.push(Overlay.dialog(lines, () => { done++; }));
+  Loop.top().draw(mockCtx);                                       // 第 1 句绘制不抛
+  Loop.top().onInput({ type: 'key', action: 'confirm' });         // → 第 2 句
+  assert.equal(Loop.stack.length, 1, '未完结不弹层');
+  assert.equal(done, 0, '未完结不回调');
+  Loop.top().draw(mockCtx);
+  Loop.top().onInput({ type: 'tap', x: 160, y: 90 });             // 第 2 句确认 → 完结
+  assert.equal(done, 1, '完结回调一次');
+  assert.equal(Loop.stack.length, 0, '完结后弹层 pop');
 });
 
 test('DEBUG_LOCK：开启时 applyEffects 负值归零，关闭时正常应用', () => {

@@ -57,6 +57,19 @@ test('create：ready 期间 update 不累计时长，tap 后恢复推进', () =>
   assert.equal(calls, 1, 'play 下快进至超时应结算一次');
 });
 
+test('tapDir：defend 触点以帅帐为原点取主轴，点在来敌身上即对应方向', () => {
+  const { MinigameScene } = boot();
+  const T = MinigameScene.tapDir;
+  assert.equal(T(159, 24), 0, '北面来敌（顶中）→ 北');
+  assert.equal(T(223, 88), 1, '东面来敌（右中）→ 东');
+  assert.equal(T(159, 152), 2, '南面来敌（底中）→ 南');
+  assert.equal(T(95, 88), 3, '西面来敌（左中）→ 西');
+  assert.equal(T(250, 30), 1, '右上远点（横向偏移大）→ 东');
+  assert.equal(T(30, 150), 3, '左下远点（横向偏移大）→ 西');
+  assert.equal(T(155, 30), 0, '帐顶近轴 → 北');
+  assert.equal(T(165, 150), 2, '帐底近轴 → 南');
+});
+
 test('defend 型（mg03）：快进至结算回调一次且星级合法', () => {
   const { MinigameScene, NODES } = boot();
   let calls = 0, stars = -1;

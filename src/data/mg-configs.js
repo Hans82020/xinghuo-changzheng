@@ -10,7 +10,7 @@
       windows: [{ start: 1.5, end: 2.4 }, { start: 4.4, end: 5.3 }, { start: 7.4, end: 8.3 }, { start: 10.4, end: 11.3 }] },
 
     // n03 湘江战役：殿后死守（红34师）
-    mg03: { type: 'defend', hint: '红34师殿后——守住每一波冲锋！', guide: '按 ↑→↓← 方向键拦截冲锋；触屏点四角对应方向（左上↑ 右上→ 右下↓ 左下←）', waves: 6, gap: 2.5, hitLoss: 800 },
+    mg03: { type: 'defend', hint: '红34师殿后——守住每一波冲锋！', guide: '按 ↑→↓← 方向键拦截冲锋；触屏/鼠标直接点击来敌（点在敌人身上即可拦住）', waves: 6, gap: 2.5, hitLoss: 800 },
 
     // n04 通道转兵：转兵决策
     mg04: { type: 'trust', hint: '危急关头，每一次决断都在校准航向！', guide: '点击左 / 右两张选项卡，做出你的决断', rounds: [
