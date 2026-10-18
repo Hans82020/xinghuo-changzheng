@@ -14,11 +14,17 @@
       return XH.State.applyDelta(st, d);
     },
 
-    // 行军事件抽取：seed 线性同余伪随机（seed=(seed*48271)%2147483647），按权重抽，minFaith 过滤
+    // 行军事件抽取：seed 线性同余伪随机（seed=(seed*48271)%2147483647），按权重抽；
+    // 条件过滤：min*/max* 字段限定事件抽取的资源区间（max 为开区间，如 maxSupply:30 表示仅 supply<30 时抽取）
     pickEvent(st) {
       if (!Number.isFinite(st.seed) || st.seed <= 0) st.seed = 1;   // 守卫：坏档 seed=NaN/非正数回退常数，防抽取退化
       st.seed = (st.seed * 48271) % 2147483647;
-      const pool = XH.EVENTS.filter(ev => !ev.minFaith || st.faith >= ev.minFaith);
+      const ok = (v, min, max) => (min == null || v >= min) && (max == null || v < max);
+      let pool = XH.EVENTS.filter(ev =>
+        ok(st.faith, ev.minFaith, ev.maxFaith) && ok(st.supply, ev.minSupply, ev.maxSupply) &&
+        ok(st.morale, ev.minMorale, ev.maxMorale) && ok(st.troops, ev.minTroops, ev.maxTroops));
+      const crisis = pool.filter(ev => ev.crisis);
+      if (crisis.length) pool = crisis;                       // 资源告急时必抽危机事件，强化资源存在感
       let r = (st.seed / 2147483647) * pool.reduce((s, e) => s + e.weight, 0);
       for (const ev of pool) { r -= ev.weight; if (r < 0) return ev; }
       return pool[pool.length - 1];

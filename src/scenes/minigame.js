@@ -30,7 +30,7 @@
     create(node, st, onDone) {
       const M = XH.Mech, MD = XH.MechDraw, R = XH.Render, C = () => XH.PALETTE;
       const cfg = XH.MG_CONFIGS[node.mg];
-      const g = { type: cfg.type, phase: 'play', t: 0, resultT: 0, stars: 0, finished: false };
+      const g = { type: cfg.type, phase: 'ready', t: 0, resultT: 0, stars: 0, finished: false };  // ready：指引屏，任意 tap/confirm 开玩
 
       // —— 结算：0.8s 展示成功/失败与星级后回调一次 ——
       const finish = (stars) => {
@@ -73,7 +73,7 @@
 
       const scene = {
         update(dt) {
-          if (g.finished) return;
+          if (g.finished || g.phase === 'ready') return;   // ready 指引屏：不计时、不推进
           if (g.phase === 'result') {                 // 结算展示 0.8s 后回调
             g.resultT += dt;
             if (g.resultT >= 0.8) { g.finished = true; onDone(g.stars); }
@@ -137,6 +137,10 @@
         },
 
         onInput(e) {
+          if (g.phase === 'ready') {                 // 指引屏：tap / 回车进入玩法
+            if (e.type === 'tap' || (e.type === 'key' && e.action === 'confirm')) g.phase = 'play';
+            return;
+          }
           if (g.phase !== 'play') return;
           const isTap = e.type === 'tap', isConfirm = e.type === 'key' && e.action === 'confirm';
           switch (cfg.type) {
@@ -160,9 +164,10 @@
               break;
             }
             case 'defend': {
-              if (e.type !== 'key') return;
-              const dir = { up: 0, right: 1, down: 2, left: 3 }[e.action];
-              if (dir != null) M.defendIntercept(df, dir);
+              let dir = -1;
+              if (e.type === 'key') dir = { up: 0, right: 1, down: 2, left: 3 }[e.action] ?? -1;
+              else if (isTap) dir = e.y < 90 ? (e.x < 160 ? 0 : 1) : (e.x < 160 ? 3 : 2);  // 触屏四象限：左上↑ 右上→ 右下↓ 左下←
+              if (dir >= 0) M.defendIntercept(df, dir);
               break;
             }
             case 'allocate': {
@@ -214,6 +219,15 @@
         draw(ctx) {
           const P = C();
           this.areas = [];                                       // 每帧重建热区（与 overlays 契约统一）
+          if (g.phase === 'ready') {                             // 玩法指引屏：名称 + 操作说明 + 开始提示
+            R.px(ctx, 0, 0, 320, 180, 'rgba(11,14,19,0.82)');
+            R.panel(ctx, 40, 44, 240, 92);
+            R.text(ctx, node.name, 160, 56, { size: 11, align: 'center', color: P.sparkGold });
+            const gl = R.wrapText(cfg.guide || cfg.hint, 24);
+            gl.forEach((ln, i) => R.text(ctx, ln, 160, 76 + i * 12, { size: 8, align: 'center', color: P.textMain }));
+            R.text(ctx, '—— 点击画面 / 按回车 开始 ——', 160, 80 + gl.length * 12, { size: 8, align: 'center', color: P.okGreen });
+            return;
+          }
           switch (cfg.type) {
             case 'timing': MD.timing(ctx, { t: g.t, span, windows: cfg.windows }); break;
             case 'rhythm': MD.rhythm(ctx, { beats: rhy.beats, hit: rhy.hit, judges: rhy.judges, now: g.t }); break;

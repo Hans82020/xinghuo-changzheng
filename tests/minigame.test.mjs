@@ -30,7 +30,7 @@ test('scoreStars：9 类结算星级映射', () => {
   assert.equal(S('finale', {}, MG_CONFIGS.mg14), 3);
 });
 
-test('create：返回可运行场景且 mock ctx 下 draw 不抛', () => {
+test('create：ready 指引屏起步，tap/回车进入玩法后可运行', () => {
   const { MinigameScene, NODES } = boot();
   const st = { seed: 12345 };
   let done = -1;
@@ -38,15 +38,30 @@ test('create：返回可运行场景且 mock ctx 下 draw 不抛', () => {
   assert.equal(typeof scene.update, 'function');
   assert.equal(typeof scene.draw, 'function');
   assert.equal(typeof scene.onInput, 'function');
-  scene.draw(mockCtx);
-  scene.update(0.016); scene.update(5); // 快进也应安全
+  scene.draw(mockCtx);                                        // ready 指引屏绘制不抛
+  scene.update(5);                                            // ready 期间快进应安全（不推进不回调）
+  assert.equal(done, -1, 'ready 期间不得结算');
+  scene.onInput({ type:'key', action:'confirm' });            // 回车脱离 ready
+  scene.draw(mockCtx); scene.update(0.016); scene.update(5);  // play 阶段快进也应安全
   scene.onInput({ type:'tap', x:160, y:90 });
+});
+
+test('create：ready 期间 update 不累计时长，tap 后恢复推进', () => {
+  const { MinigameScene, NODES } = boot();
+  let calls = 0;
+  const scene = MinigameScene.create(NODES[8], { seed: 7 }, () => { calls++; });  // mg09 dodge 60s
+  for (let i = 0; i < 20; i++) scene.update(5);               // ready 下快进 100s 不得结算
+  assert.equal(calls, 0, 'ready 期间不得结算');
+  scene.onInput({ type:'tap', x:160, y:90 });                 // tap 脱离 ready 进入 play
+  for (let i = 0; i < 20 && calls === 0; i++) scene.update(5);
+  assert.equal(calls, 1, 'play 下快进至超时应结算一次');
 });
 
 test('defend 型（mg03）：快进至结算回调一次且星级合法', () => {
   const { MinigameScene, NODES } = boot();
   let calls = 0, stars = -1;
   const scene = MinigameScene.create(NODES[2], { seed: 7 }, s => { calls++; stars = s; });
+  scene.onInput({ type:'key', action:'confirm' });            // 脱离 ready 指引屏
   for (let i = 0; i < 30 && calls === 0; i++) scene.update(3); // 反复快进直至回调触发
   assert.equal(calls, 1, 'onDone 恰好被调用一次');
   assert.ok(stars >= 0 && stars <= 3, '星级应在 0~3 之间');
@@ -58,6 +73,7 @@ test('trust 型（mg04）：连点正确选项 3 轮回调一次且 3 星', () =
   const { MinigameScene, NODES } = boot();
   let calls = 0, stars = -1;
   const scene = MinigameScene.create(NODES[3], { seed: 7 }, s => { calls++; stars = s; });
+  scene.onInput({ type:'key', action:'confirm' });            // 脱离 ready 指引屏
   scene.draw(mockCtx);                                        // draw 时重建热区，绘制后 areas 才可用
   const area = scene.areas.find(a => a.action === 'positive');
   assert.ok(area, 'trust 场景需把按钮热区暴露到 scene.areas');

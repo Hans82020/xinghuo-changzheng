@@ -48,6 +48,7 @@
       draw(ctx) {
         const R0 = R(), C0 = C(), N = XH.NODES;
         R0.theme(ctx, node.theme);
+        XH.drawTerrain(ctx);                                 // 真实地形底图：河流/雪山/草地/省名
         for (let i = 1; i < N.length; i++) {               // 全程路线虚线：已走金色 / 未走暗灰
           const p = N[i - 1].pos, q = N[i].pos, col = i <= st.nodeIndex ? C0.sparkGold : C0.textDim;
           for (let d = 0; d < 1; d += 0.07) {

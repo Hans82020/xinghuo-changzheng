@@ -5,7 +5,7 @@ import { load, xh } from './load.mjs';
 const mockCtx = { fillRect(){}, fillText(){}, clearRect(){}, font:'', fillStyle:'', textAlign:'', textBaseline:'' };
 
 function boot() {
-  load('src/data/palette.js'); load('src/data/sprites.js'); load('src/data/nodes.js');
+  load('src/data/palette.js'); load('src/data/sprites.js'); load('src/data/nodes.js'); load('src/data/map-terrain.js');
   load('src/data/questions.js'); load('src/data/events.js'); load('src/data/mg-configs.js');
   load('src/core/state.js'); load('src/core/save.js'); load('src/platform/platform.js');
   load('src/engine/render.js'); load('src/engine/loop.js'); load('src/engine/mechanics.js');
@@ -191,6 +191,7 @@ test('nodeflow.start：story→choice→quiz→minigame 逐级推进，quiz 用 
   }
   assert.deepEqual([st.quizRight, st.quizTotal], [3, 3], 'quizResult 由 NodeFlow 记账');
   assert.equal(Loop.stack.length, 2, 'quiz 后应进入 minigame');
+  Loop.top().onInput({ type: 'key', action: 'confirm' });         // 脱离 minigame ready 指引屏
   for (let i = 0; i < 40 && st.mgStars.n01 == null; i++) Loop.top().update(2);   // 快进结算
   assert.equal(st.mgStars.n01, 0, 'timing 未按键 0 星');
 });

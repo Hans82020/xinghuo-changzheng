@@ -6,7 +6,7 @@
 html,body{margin:0;height:100%;background:#0b0e13;overflow:hidden}
 #wrap{height:100%;display:flex;align-items:center;justify-content:center}
 canvas{image-rendering:pixelated;image-rendering:crisp-edges;touch-action:none}
-</style></head><body><div id="wrap"><canvas id="game" width="320" height="180"></canvas></div>
+</style></head><body><div id="wrap"><canvas id="game" width="960" height="540"></canvas></div>
 <script>
 /*== palette.js ==*/
 ;(function (XH) {
@@ -80,7 +80,7 @@ canvas{image-rendering:pixelated;image-rendering:crisp-edges;touch-action:none}
 ;(function (XH) {
   const O = (label, effects, explain, correct) => ({ label, effects, explain, correct: !!correct });
   XH.NODES = [
-    { id:'n01', name:'于都夜渡', date:'1934.10.16', theme:'jiangnan', pos:[250,140],
+    { id:'n01', name:'于都夜渡', date:'1934.10.16', theme:'jiangnan', pos:[283,150],
       story:[
         '第五次反"围剿"失利后，中央红军被迫实行战略转移，八万六千余人在于都河畔集结，踏上漫漫长征路。',
         '为了让红军顺利渡河，三十万于都人民齐心协力保守出渡秘密，拆门板、捐寿材，连夜架设浮桥。'],
@@ -93,7 +93,7 @@ canvas{image-rendering:pixelated;image-rendering:crisp-edges;touch-action:none}
       mgReward:{troops:500, supply:0, morale:8, faith:0},
       noteCard:{ title:'于都夜渡', facts:['1934年10月16日，中央红军八万六千余人渡过于都河','三十万于都人民保守出渡秘密，拆门板捐寿材搭浮桥'], story:'于都河上的浮桥由百姓捐献的门板与寿材搭成，红军夜间渡河，悄无声息地踏上长征之路。' } },
 
-    { id:'n02', name:'突破封锁线', date:'1934.10~11', theme:'mountain', pos:[215,152],
+    { id:'n02', name:'突破封锁线', date:'1934.10~11', theme:'mountain', pos:[255,158],
       story:[
         '红军连续突破国民党军三道封锁线，向湘西方向挺进，一路宣传群众、播撒革命火种。',
         '在湖南汝城沙洲村，三名女红军借宿徐解秀家，临行前剪下自己仅有的半条被子留给老人。'],
@@ -106,7 +106,7 @@ canvas{image-rendering:pixelated;image-rendering:crisp-edges;touch-action:none}
       mgReward:{troops:0, supply:0, morale:0, faith:10},
       noteCard:{ title:'半条被子', facts:['红军连破三道封锁线向湘西挺进','三名女红军剪半条被子留给徐解秀老人'], story:'"半条被子"的故事流传至今，它道出了共产党人与人民群众同甘共苦、生死相依的本色。' } },
 
-    { id:'n03', name:'湘江战役', date:'1934.11.25~12.1', theme:'mountain', pos:[195,148],
+    { id:'n03', name:'湘江战役', date:'1934.11.25~12.1', theme:'mountain', pos:[226,148],
       story:[
         '湘江战役是长征中最惨烈的一战，红军八万六千余人血战后锐减至三万余人，鲜血染红了湘江水。',
         '红三十四师奉命殿后掩护主力渡江，师长陈树湘重伤被俘，绞断肠子壮烈殉职，少共国际师战士平均年仅十八岁。'],
@@ -119,7 +119,7 @@ canvas{image-rendering:pixelated;image-rendering:crisp-edges;touch-action:none}
       mgReward:{troops:800, supply:0, morale:6, faith:0},
       noteCard:{ title:'血战湘江', facts:['湘江战役红军由八万六千余人锐减至三万余人','红三十四师师长陈树湘绞断肠子壮烈殉职'], story:'"三年不饮湘江水，十年不食湘江鱼"，湘江战役的惨烈让红军深刻反思，为通道转兵埋下伏笔。' } },
 
-    { id:'n04', name:'通道转兵', date:'1934.12', theme:'mountain', pos:[170,135],
+    { id:'n04', name:'通道转兵', date:'1934.12', theme:'mountain', pos:[203,157],
       story:[
         '湘江战役后，若按原计划北上湘西，红军将钻入敌二十万重兵预设的口袋，后果不堪设想。',
         '通道会议上，毛泽东力主放弃北上计划，转兵敌人力量薄弱的贵州，这一转弯挽救了三万红军。'],
@@ -132,7 +132,7 @@ canvas{image-rendering:pixelated;image-rendering:crisp-edges;touch-action:none}
       mgReward:{troops:0, supply:0, morale:8, faith:0},
       noteCard:{ title:'通道转兵', facts:['湘江后北上湘西将陷入敌二十万重兵口袋','通道会议决定转兵贵州，挽救三万红军'], story:'通道转兵是长征战略方向的第一次重大调整，为遵义会议的召开创造了有利条件。' } },
 
-    { id:'n05', name:'遵义会议', date:'1935.1.15~17', theme:'mountain', pos:[150,120],
+    { id:'n05', name:'遵义会议', date:'1935.1.15~17', theme:'mountain', pos:[193,138],
       story:[
         '1935年1月15日至17日，中共中央政治局在遵义召开扩大会议，集中全力解决军事和组织问题。',
         '会议结束了"左"倾教条主义错误军事路线，确立了毛泽东在党中央和红军的领导地位，是生死攸关的转折点。'],
@@ -145,7 +145,7 @@ canvas{image-rendering:pixelated;image-rendering:crisp-edges;touch-action:none}
       mgReward:{troops:0, supply:0, morale:10, faith:0},
       noteCard:{ title:'遵义会议', facts:['1935年1月15日至17日在遵义召开','确立毛泽东在党中央和红军的领导地位'], story:'遵义会议在极端危急关头挽救了党、挽救了红军、挽救了中国革命，是党的历史上生死攸关的转折点。' } },
 
-    { id:'n06', name:'四渡赤水', date:'1935.1~3', theme:'mountain', pos:[138,112],
+    { id:'n06', name:'四渡赤水', date:'1935.1~3', theme:'mountain', pos:[168,146],
       story:[
         '遵义会议后，面对国民党四十万大军围追堵截，仅三万余人的红军在赤水河流域四次渡河，巧妙调动敌军。',
         '毛泽东声东击西、避实就虚，使红军在运动中摆脱重兵围剿，这是他军事生涯中的"得意之笔"。'],
@@ -158,7 +158,7 @@ canvas{image-rendering:pixelated;image-rendering:crisp-edges;touch-action:none}
       mgReward:{troops:300, supply:0, morale:8, faith:0},
       noteCard:{ title:'四渡赤水', facts:['红军三万余人对敌四十万大军','四渡赤水调动敌军，是毛泽东"得意之笔"'], story:'四渡赤水之战是红军长征中最精彩的军事行动，以少胜多、变被动为主动，堪称运动战典范。' } },
 
-    { id:'n07', name:'巧渡金沙江', date:'1935.5.3~9', theme:'mountain', pos:[98,96],
+    { id:'n07', name:'巧渡金沙江', date:'1935.5.3~9', theme:'mountain', pos:[128,152],
       story:[
         '红军在云南皎平渡找到七只小船，依靠三十七名船工，历经九天九夜将三万大军全部渡过金沙江。',
         '船工们人歇船不歇，红军严守纪律、优待船工，"金沙水拍云崖暖"，胜利跳出数十万敌军的包围圈。'],
@@ -171,7 +171,7 @@ canvas{image-rendering:pixelated;image-rendering:crisp-edges;touch-action:none}
       mgReward:{troops:0, supply:6, morale:6, faith:0},
       noteCard:{ title:'巧渡金沙江', facts:['皎平渡七只小船、三十七名船工','九天九夜将三万大军渡过金沙江'], story:'巧渡金沙江使红军跳出了数十万敌军的围追堵截，取得了战略转移中具有决定意义的胜利。' } },
 
-    { id:'n08', name:'彝海结盟', date:'1935.5.22', theme:'mountain', pos:[88,104],
+    { id:'n08', name:'彝海结盟', date:'1935.5.22', theme:'mountain', pos:[117,120],
       story:[
         '红军进入彝区后，总参谋长刘伯承与彝族果基家支首领小叶丹在彝海边歃血为盟，结为兄弟。',
         '小叶丹护送红军顺利通过彝区，此后数年一直珍藏结盟红旗，1942年遇难前嘱托妻子将红旗交还红军。'],
@@ -184,7 +184,7 @@ canvas{image-rendering:pixelated;image-rendering:crisp-edges;touch-action:none}
       mgReward:{troops:0, supply:0, morale:0, faith:8},
       noteCard:{ title:'彝海结盟', facts:['刘伯承与果基小叶丹在彝海歃血为盟','小叶丹护旗数年，1942年遇难前嘱妻交还红旗'], story:'彝海结盟是党的民族政策的光辉实践，红军顺利通过彝区，为强渡大渡河赢得了宝贵时间。' } },
 
-    { id:'n09', name:'强渡大渡河', date:'1935.5.24~25', theme:'mountain', pos:[70,96],
+    { id:'n09', name:'强渡大渡河', date:'1935.5.24~25', theme:'mountain', pos:[105,103],
       story:[
         '1935年5月24日至25日，红军在安顺场发起强渡，十七勇士乘小船冒着枪林弹雨突破大渡河天险。',
         '勇士们在惊涛骇浪中奋勇向前，为红军北上打开了通道，"浪尖上的冲锋号"响彻大渡河两岸。'],
@@ -197,7 +197,7 @@ canvas{image-rendering:pixelated;image-rendering:crisp-edges;touch-action:none}
       mgReward:{troops:200, supply:0, morale:6, faith:0},
       noteCard:{ title:'强渡大渡河', facts:['1935年5月24日至25日安顺场强渡','十七勇士乘船突破大渡河天险'], story:'强渡大渡河成功，粉碎了蒋介石让红军成为"石达开第二"的妄想，为北上打开了通道。' } },
 
-    { id:'n10', name:'飞夺泸定桥', date:'1935.5.28~29', theme:'mountain', pos:[62,86],
+    { id:'n10', name:'飞夺泸定桥', date:'1935.5.28~29', theme:'mountain', pos:[95,90],
       story:[
         '红四团接到命令后，一昼夜急行军二百四十里，赶在敌援军之前到达泸定桥。',
         '二十二名勇士攀着十三根铁索，冒着对岸敌军的枪林弹雨冲向桥头，敌军惊呼"你们是飞过来的吧"。'],
@@ -210,7 +210,7 @@ canvas{image-rendering:pixelated;image-rendering:crisp-edges;touch-action:none}
       mgReward:{troops:200, supply:0, morale:8, faith:0},
       noteCard:{ title:'飞夺泸定桥', facts:['红四团一昼夜急行军二百四十里','二十二勇士攀十三根铁索夺桥'], story:'飞夺泸定桥是红军长征中的一场硬仗，红军以惊人的速度和勇气，再次绝处逢生。' } },
 
-    { id:'n11', name:'翻越夹金山', date:'1935.6.12', theme:'snow', pos:[55,70],
+    { id:'n11', name:'翻越夹金山', date:'1935.6.12', theme:'snow', pos:[88,66],
       story:[
         '夹金山是红军长征翻越的第一座大雪山，海拔四千余米，红军战士身着单衣草鞋，顶着风雪严寒攀登。',
         '许多战士把仅有的棉衣让给战友，自己却冻僵在雪山上，化作风雪中屹立的"丰碑"。'],
@@ -223,7 +223,7 @@ canvas{image-rendering:pixelated;image-rendering:crisp-edges;touch-action:none}
       mgReward:{troops:100, supply:0, morale:6, faith:0},
       noteCard:{ title:'翻越夹金山', facts:['夹金山是红军翻越的第一座大雪山','战士单衣草鞋御严寒，互相帮助翻越'], story:'翻越夹金山是红军长征中第一次战胜极端自然环境，战士们以钢铁意志征服了雪山天险。' } },
 
-    { id:'n12', name:'过草地', date:'1935.8下旬', theme:'grass', pos:[45,55],
+    { id:'n12', name:'过草地', date:'1935.8下旬', theme:'grass', pos:[72,48],
       story:[
         '松潘草地一望无际，泥沼遍布、气候恶劣，红军粮绝衣单，陷入极端困境，减员巨大。',
         '《金色的鱼钩》中，老班长用缝衣针做鱼钩钓鱼给伤员吃，自己却嚼鱼骨充饥，最终牺牲在草地上。'],
@@ -236,7 +236,7 @@ canvas{image-rendering:pixelated;image-rendering:crisp-edges;touch-action:none}
       mgReward:{troops:100, supply:0, morale:6, faith:0},
       noteCard:{ title:'过草地', facts:['松潘草地泥沼无边、粮绝，减员巨大','老班长缝衣针做钩钓鱼给伤员，自己嚼鱼骨'], story:'过草地是长征中最艰苦的阶段之一，红军以惊人的毅力走出草地，向着胜利继续前进。' } },
 
-    { id:'n13', name:'激战腊子口', date:'1935.9.17', theme:'loess', pos:[60,35],
+    { id:'n13', name:'激战腊子口', date:'1935.9.17', theme:'loess', pos:[86,34],
       story:[
         '腊子口是川西北通往甘南的天险隘口，两面绝壁夹一线，正面强攻屡屡受挫。',
         '一名外号"云贵川"的苗族小战士主动请缨，带人攀上绝壁从侧后奇袭，一举突破天险。'],
@@ -249,7 +249,7 @@ canvas{image-rendering:pixelated;image-rendering:crisp-edges;touch-action:none}
       mgReward:{troops:200, supply:0, morale:8, faith:0},
       noteCard:{ title:'激战腊子口', facts:['腊子口是川西北通往甘南的天险隘口','外号"云贵川"的苗族小战士攀崖奇袭'], story:'腊子口一战打通了红军北上的通道，为红军进入陕甘苏区、完成长征奠定了基础。' } },
 
-    { id:'n14', name:'三军会师', date:'1935.10.19→1936.10 会宁', theme:'loess', pos:[85,32],
+    { id:'n14', name:'三军会师', date:'1935.10.19→1936.10 会宁', theme:'loess', pos:[118,33],
       story:[
         '1935年10月19日，中央红军抵达陕北吴起镇，完成了历时一年的战略转移。',
         '1936年10月，红一、红二、红四方面军在甘肃会宁胜利会师，红军纵横十余省，行程二万五千里。'],
@@ -261,6 +261,51 @@ canvas{image-rendering:pixelated;image-rendering:crisp-edges;touch-action:none}
       mgReward:{troops:0, supply:0, morale:10, faith:0},
       noteCard:{ title:'三军会师', facts:['1935年10月19日中央红军抵达吴起镇','1936年10月三大主力在会宁会师，行程二万五千里'], story:'长征的胜利是中国革命转危为安的关键，三大主力会师宣告了长征的伟大胜利，开启了革命新篇章。' } },
   ];
+})(globalThis.XH = globalThis.XH || {});
+
+/*== map-terrain.js ==*/
+;(function (XH) {
+  // 像素地形层（march 底图）：河流折线 / 雪山符号 / 草地沼泽 / 省名标注
+  // 画在 theme 之后、行军路线之前，坐标与 NODES.pos 同一 320×180 逻辑坐标系
+  const RIVERS = [
+    { name: '湘江',   pts: [[236,96], [231,116], [227,136], [222,156], [218,174]] },
+    { name: '乌江',   pts: [[206,120], [202,136], [197,152], [192,168]] },
+    { name: '赤水',   pts: [[185,128], [177,140], [169,150], [159,140], [153,154]] },  // 迂回河曲呼应四渡
+    { name: '金沙江', pts: [[149,100], [141,120], [133,140], [123,158], [113,174]] },
+    { name: '大渡河', pts: [[109,70], [105,86], [101,102], [97,120], [93,140]] },
+  ];
+  const PEAKS = [[80,58], [94,60], [76,66], [100,68], [70,60]];      // 夹金山一带雪峰顶点
+  const MARSH = { x: 54, y: 36, w: 32, h: 17 };                       // 松潘草地
+  const PROVINCES = [['江西', 268, 132], ['湖南', 239, 114], ['贵州', 197, 160],
+    ['云南', 142, 166], ['四川', 101, 74], ['西康', 74, 92], ['甘肃', 125, 38]];
+  const BLUE = '#3d6b9e', SNOW_TOP = '#e8edf2', SNOW_BODY = '#9aa7b5';
+
+  XH.drawTerrain = (ctx) => {
+    const R = XH.Render, C = XH.PALETTE;
+    // 草地：暗绿块 + 沼泽斑驳点
+    R.px(ctx, MARSH.x, MARSH.y, MARSH.w, MARSH.h, '#3b4d22');
+    for (let i = 0; i < 14; i++) {
+      const mx = MARSH.x + (i * 7 + 3) % MARSH.w, my = MARSH.y + (i * 5 + 2) % (MARSH.h - 2);
+      R.px(ctx, mx, my, 2, 1, i % 2 ? '#55693a' : '#2a3a18');
+    }
+    // 河流：2px 折线（步进插值）
+    for (const rv of RIVERS) {
+      for (let i = 1; i < rv.pts.length; i++) {
+        const a = rv.pts[i - 1], b = rv.pts[i];
+        const dx = b[0] - a[0], dy = b[1] - a[1], n = Math.max(1, Math.max(Math.abs(dx), Math.abs(dy)));
+        for (let s = 0; s <= n; s++)
+          R.px(ctx, Math.round(a[0] + dx * s / n), Math.round(a[1] + dy * s / n), 2, 2, BLUE);
+      }
+    }
+    // 雪峰：^ 形小三角（白雪顶 + 灰山体）
+    for (const [x, y] of PEAKS) {
+      R.px(ctx, x + 2, y, 1, 1, SNOW_TOP);
+      R.px(ctx, x + 1, y + 1, 3, 1, SNOW_BODY);
+      R.px(ctx, x, y + 2, 5, 1, SNOW_BODY);
+    }
+    // 省名：暗色小字
+    for (const [name, x, y] of PROVINCES) R.text(ctx, name, x, y, { size: 7, color: C.textDim });
+  };
 })(globalThis.XH = globalThis.XH || {});
 
 /*== questions.js ==*/
@@ -341,6 +386,13 @@ canvas{image-rendering:pixelated;image-rendering:crisp-edges;touch-action:none}
       options:[ O('分摊背粮', {troops:0, supply:-4, morale:1, faith:0}, '同甘共苦，共渡难关'), O('丢弃湿粮轻装', {troops:0, supply:-8, morale:0, faith:0}, '口粮告急，行军困难') ] },
     { id:'ev_guide', text:'岔路口向导犹豫：“东边近，可常有团丁。”', weight:2,
       options:[ O('听向导绕西边', {troops:0, supply:-3, morale:0, faith:0}, '稳妥，多走半天路'), O('坚决走东边', {troops:-200, supply:0, morale:0, faith:0}, '遭团丁袭扰，小有伤亡') ] },
+    // —— 资源危机事件：仅对应资源 <30 时可抽（pickEvent 危机优先），给一次消耗其他资源的自救抉择 ——
+    { id:'ev_starve', text:'粮袋见底，炊事班报告给养不足两日。', weight:5, maxSupply:30, crisis:true,
+      options:[ O('严格执行配给，挖野菜充饥', {troops:0, supply:8, morale:3, faith:0}, '官兵一致同甘苦，共渡难关'), O('杀掉驮马充饥，轻装疾行', {troops:0, supply:12, morale:-4, faith:0}, '舍畜保人，士气受损但走出困境') ] },
+    { id:'ev_wear', text:'连日苦战减员，队伍里响起埋怨声。', weight:5, maxMorale:30, crisis:true,
+      options:[ O('党员骨干下连谈心，骨干带头表率', {troops:0, supply:0, morale:12, faith:2}, '支部建在连上，士气重新凝聚'), O('严厉处罚发牢骚的人', {troops:0, supply:0, morale:5, faith:-4}, '压下了声音，压不住人心') ] },
+    { id:'ev_doubt', text:'队伍宿营的村庄门庭紧闭，老乡探头观望。', weight:5, maxFaith:30, crisis:true,
+      options:[ O('开仓归还借粮，帮老乡挑水劈柴', {troops:0, supply:-5, morale:0, faith:12}, '行动胜过千言，民心重新聚拢'), O('不作停留，加速通过', {troops:0, supply:0, morale:0, faith:2}, '误会依旧，离村时仍无人相送') ] },
   ];
 })(globalThis.XH = globalThis.XH || {});
 
@@ -349,18 +401,18 @@ canvas{image-rendering:pixelated;image-rendering:crisp-edges;touch-action:none}
   // 14 个玩法配置：type 对应 XH.Mech 逻辑核，hint 为玩法提示（史实文案，不编造数字）
   XH.MG_CONFIGS = {
     // n01 于都夜渡：搭浮桥（敌机间隙铺门板）
-    mg01: { type: 'timing', hint: '敌机掠过的间隙里铺上门板！',
+    mg01: { type: 'timing', hint: '敌机掠过的间隙里铺上门板！', guide: '敌机掠过、窗口点亮的瞬间，点击画面 / 按回车铺上门板',
       windows: [{ start: 2, end: 3.2 }, { start: 5, end: 6.2 }, { start: 8, end: 9.2 }] },
 
     // n02 突破封锁线：穿插突围（巡逻队交接缺口）
-    mg02: { type: 'timing', hint: '抓住巡逻队交接的缺口穿过封锁线！',
+    mg02: { type: 'timing', hint: '抓住巡逻队交接的缺口穿过封锁线！', guide: '缺口出现的瞬间，点击画面 / 按回车穿过封锁线',
       windows: [{ start: 1.5, end: 2.4 }, { start: 4.4, end: 5.3 }, { start: 7.4, end: 8.3 }, { start: 10.4, end: 11.3 }] },
 
     // n03 湘江战役：殿后死守（红34师）
-    mg03: { type: 'defend', hint: '红34师殿后——守住每一波冲锋！', waves: 6, gap: 2.5, hitLoss: 800 },
+    mg03: { type: 'defend', hint: '红34师殿后——守住每一波冲锋！', guide: '按 ↑→↓← 方向键拦截冲锋；触屏点四角对应方向（左上↑ 右上→ 右下↓ 左下←）', waves: 6, gap: 2.5, hitLoss: 800 },
 
     // n04 通道转兵：转兵决策
-    mg04: { type: 'trust', hint: '危急关头，每一次决断都在校准航向！', rounds: [
+    mg04: { type: 'trust', hint: '危急关头，每一次决断都在校准航向！', guide: '点击左 / 右两张选项卡，做出你的决断', rounds: [
       { prompt: '湘江之后，往哪里走？', positive: '转兵贵州，避敌锋芒', negative: '坚持北上湘西',
         explain: '通道会议力主转兵敌人力量薄弱的贵州，避开了重兵预设的口袋。' },
       { prompt: '面对坚固设防城市', positive: '避实击虚，运动歼敌', negative: '强行攻坚',
@@ -370,7 +422,7 @@ canvas{image-rendering:pixelated;image-rendering:crisp-edges;touch-action:none}
     ] },
 
     // n05 遵义会议：拨正航向（纠正三种错误倾向）
-    mg05: { type: 'trust', hint: '拨正航向——纠正军事指挥上的错误倾向！', rounds: [
+    mg05: { type: 'trust', hint: '拨正航向——纠正军事指挥上的错误倾向！', guide: '点击左 / 右两张选项卡，纠正错误倾向', rounds: [
       { prompt: '如何对待进攻中的冒险主义？', positive: '纠正这一错误倾向', negative: '继续沿用',
         explain: '遵义会议集中全力纠正军事上的错误路线，结束了冒险主义的指挥。' },
       { prompt: '如何对待防御中的保守主义？', positive: '纠正这一错误倾向', negative: '继续沿用',
@@ -380,15 +432,15 @@ canvas{image-rendering:pixelated;image-rendering:crisp-edges;touch-action:none}
     ] },
 
     // n06 四渡赤水：声东击西（4 轮渡口抉择，每轮 2 个设防点）
-    mg06: { type: 'route', hint: '四渡赤水——选出敌军想不到的渡口！',
+    mg06: { type: 'route', hint: '四渡赤水——选出敌军想不到的渡口！', guide: '点击下方渡口热区（从左到右四段），避开有敌军设防的渡口',
       guards: [[0, 1], [1, 2], [2, 3], [0, 3]] },
 
     // n07 巧渡金沙江：摆渡调度（三十七名船工人歇船不歇）
-    mg07: { type: 'allocate', hint: '37 名船工人歇船不歇，排好三班！', pool: 12, timeLimit: 30,
+    mg07: { type: 'allocate', hint: '37 名船工人歇船不歇，排好三班！', guide: '点 ＋／－ 为各班分配船工，点「确认分配」结算', pool: 12, timeLimit: 30,
       slots: [{ id: 'early', min: 2, label: '凌晨班' }, { id: 'day', min: 4, label: '白班' }, { id: 'night', min: 3, label: '夜班' }] },
 
     // n08 彝海结盟：以诚相待（彝区习俗抉择）
-    mg08: { type: 'trust', hint: '以诚相待——尊重彝胞，团结过境！', rounds: [
+    mg08: { type: 'trust', hint: '以诚相待——尊重彝胞，团结过境！', guide: '点击左 / 右两张选项卡，以诚相待赢得信任', rounds: [
       { prompt: '彝家有自己的风俗禁忌，队伍该如何行事？', positive: '尊重彝家风俗，入乡随俗', negative: '各行其是，不予理会',
         explain: '尊重民族习俗，是红军民族政策赢得人心的第一步。' },
       { prompt: '向彝胞借用物品之后呢？', positive: '如数归还，买卖公平', negative: '军情紧急，暂缓归还',
@@ -400,26 +452,26 @@ canvas{image-rendering:pixelated;image-rendering:crisp-edges;touch-action:none}
     ] },
 
     // n09 强渡大渡河：浪尖冲锋（躲漩涡与弹雨）
-    mg09: { type: 'dodge', hint: '躲开漩涡与弹雨，把勇士送上对岸！', hazardCount: 25, duration: 60 },
+    mg09: { type: 'dodge', hint: '躲开漩涡与弹雨，把勇士送上对岸！', guide: '点击左 / 中 / 右变道或按 ←→ 键，躲开漩涡与弹雨', hazardCount: 25, duration: 60 },
 
     // n10 飞夺泸定桥：昼夜奔袭（240 里昼夜兼程）
-    mg10: { type: 'rhythm', hint: '240 里昼夜兼程——跟上鼓点！', tol: 0.12,
+    mg10: { type: 'rhythm', hint: '240 里昼夜兼程——跟上鼓点！', guide: '鼓点落到底的瞬间，点击画面 / 按回车踏准节奏', tol: 0.12,
       beats: Array.from({ length: 20 }, (_, i) => 0.8 + i * 0.6) },
 
     // n11 翻越夹金山：翻山（风雪中稳住队形）
-    mg11: { type: 'rhythm', hint: '风雪扑面——按节奏稳住队形！', tol: 0.10,
+    mg11: { type: 'rhythm', hint: '风雪扑面——按节奏稳住队形！', guide: '节拍落到底的瞬间，点击画面 / 按回车稳住队形', tol: 0.10,
       beats: Array.from({ length: 24 }, (_, i) => 0.8 + i * 0.5) },
 
     // n12 过草地：草地行军（干粮分配，伤员优先）
-    mg12: { type: 'allocate', hint: '干粮不多——伤员优先，官兵一致！', pool: 10, timeLimit: 25,
+    mg12: { type: 'allocate', hint: '干粮不多——伤员优先，官兵一致！', guide: '点 ＋／－ 分配干粮（伤员优先），点「确认分配」结算', pool: 10, timeLimit: 25,
       slots: [{ id: 'wounded', min: 1, label: '伤员' }, { id: 'fight', min: 2, label: '战斗员' },
         { id: 'cooks', min: 2, label: '炊事班' }, { id: 'backup', min: 1, label: '预备队' }] },
 
     // n13 激战腊子口：攀崖奇兵（正面佯攻 + 侧后攀爬双线）
-    mg13: { type: 'dual', hint: '正面佯攻不能停，侧后攀崖要抓紧！（←佯攻 →攀爬）' },
+    mg13: { type: 'dual', hint: '正面佯攻不能停，侧后攀崖要抓紧！（←佯攻 →攀爬）', guide: '按 ← / 点左半屏佯攻，按 → / 点右半屏攀爬，两手交替不断', },
 
     // n14 三军会师：大会师（三面红旗汇聚）
-    mg14: { type: 'finale', hint: '按住确认键，让三面红旗汇聚！' },
+    mg14: { type: 'finale', hint: '按住确认键，让三面红旗汇聚！', guide: '按住回车 / 按住画面不放，让三面红旗汇聚' },
   };
 })(globalThis.XH = globalThis.XH || {});
 
@@ -611,6 +663,7 @@ canvas{image-rendering:pixelated;image-rendering:crisp-edges;touch-action:none}
     },
     start(canvas) {
       this._ctx = canvas.getContext('2d'); this._ctx.imageSmoothingEnabled = false;
+      this._ctx.setTransform(3, 0, 0, 3, 0, 0);   // 3 倍超采样：绘制代码仍用 320×180 逻辑坐标，中文按 960×540 物理分辨率渲染
       XH.Platform.input.bindCanvas(canvas);
       XH.Platform.input.on(e => this.handleInput(e));
       this._running = true; this._last = performance.now();
@@ -925,7 +978,7 @@ canvas{image-rendering:pixelated;image-rendering:crisp-edges;touch-action:none}
     create(node, st, onDone) {
       const M = XH.Mech, MD = XH.MechDraw, R = XH.Render, C = () => XH.PALETTE;
       const cfg = XH.MG_CONFIGS[node.mg];
-      const g = { type: cfg.type, phase: 'play', t: 0, resultT: 0, stars: 0, finished: false };
+      const g = { type: cfg.type, phase: 'ready', t: 0, resultT: 0, stars: 0, finished: false };  // ready：指引屏，任意 tap/confirm 开玩
 
       // —— 结算：0.8s 展示成功/失败与星级后回调一次 ——
       const finish = (stars) => {
@@ -968,7 +1021,7 @@ canvas{image-rendering:pixelated;image-rendering:crisp-edges;touch-action:none}
 
       const scene = {
         update(dt) {
-          if (g.finished) return;
+          if (g.finished || g.phase === 'ready') return;   // ready 指引屏：不计时、不推进
           if (g.phase === 'result') {                 // 结算展示 0.8s 后回调
             g.resultT += dt;
             if (g.resultT >= 0.8) { g.finished = true; onDone(g.stars); }
@@ -1032,6 +1085,10 @@ canvas{image-rendering:pixelated;image-rendering:crisp-edges;touch-action:none}
         },
 
         onInput(e) {
+          if (g.phase === 'ready') {                 // 指引屏：tap / 回车进入玩法
+            if (e.type === 'tap' || (e.type === 'key' && e.action === 'confirm')) g.phase = 'play';
+            return;
+          }
           if (g.phase !== 'play') return;
           const isTap = e.type === 'tap', isConfirm = e.type === 'key' && e.action === 'confirm';
           switch (cfg.type) {
@@ -1055,9 +1112,10 @@ canvas{image-rendering:pixelated;image-rendering:crisp-edges;touch-action:none}
               break;
             }
             case 'defend': {
-              if (e.type !== 'key') return;
-              const dir = { up: 0, right: 1, down: 2, left: 3 }[e.action];
-              if (dir != null) M.defendIntercept(df, dir);
+              let dir = -1;
+              if (e.type === 'key') dir = { up: 0, right: 1, down: 2, left: 3 }[e.action] ?? -1;
+              else if (isTap) dir = e.y < 90 ? (e.x < 160 ? 0 : 1) : (e.x < 160 ? 3 : 2);  // 触屏四象限：左上↑ 右上→ 右下↓ 左下←
+              if (dir >= 0) M.defendIntercept(df, dir);
               break;
             }
             case 'allocate': {
@@ -1109,6 +1167,15 @@ canvas{image-rendering:pixelated;image-rendering:crisp-edges;touch-action:none}
         draw(ctx) {
           const P = C();
           this.areas = [];                                       // 每帧重建热区（与 overlays 契约统一）
+          if (g.phase === 'ready') {                             // 玩法指引屏：名称 + 操作说明 + 开始提示
+            R.px(ctx, 0, 0, 320, 180, 'rgba(11,14,19,0.82)');
+            R.panel(ctx, 40, 44, 240, 92);
+            R.text(ctx, node.name, 160, 56, { size: 11, align: 'center', color: P.sparkGold });
+            const gl = R.wrapText(cfg.guide || cfg.hint, 24);
+            gl.forEach((ln, i) => R.text(ctx, ln, 160, 76 + i * 12, { size: 8, align: 'center', color: P.textMain }));
+            R.text(ctx, '—— 点击画面 / 按回车 开始 ——', 160, 80 + gl.length * 12, { size: 8, align: 'center', color: P.okGreen });
+            return;
+          }
           switch (cfg.type) {
             case 'timing': MD.timing(ctx, { t: g.t, span, windows: cfg.windows }); break;
             case 'rhythm': MD.rhythm(ctx, { beats: rhy.beats, hit: rhy.hit, judges: rhy.judges, now: g.t }); break;
@@ -1185,6 +1252,7 @@ canvas{image-rendering:pixelated;image-rendering:crisp-edges;touch-action:none}
       const C = P(), s = st || {};
       R().px(ctx, 0, 0, 320, 24, C.uiPanel);                 // 顶栏底
       R().px(ctx, 0, 23, 320, 1, C.sparkGold);               // 1px 金色下边线
+      const flash = Math.floor(Date.now() / 400) % 2;        // 低资源预警闪烁节拍
       const items = [
         { label: '兵力', value: this.fmtTroops(s.troops || 0), color: C.textMain },
         { label: '粮草', value: String(s.supply == null ? 0 : s.supply), color: C.sparkGold },
@@ -1192,9 +1260,9 @@ canvas{image-rendering:pixelated;image-rendering:crisp-edges;touch-action:none}
         { label: '民心', value: String(s.faith == null ? 0 : s.faith), color: C.torch },
       ];
       items.forEach((it, i) => {
-        const x = 8 + i * 56;
+        const x = 8 + i * 56, low = i > 0 && (s[['supply', 'morale', 'faith'][i - 1]] || 0) < 30;
         R().text(ctx, it.label, x, 5, { size: 8, color: C.textDim });
-        R().text(ctx, it.value, x + 18, 5, { size: 8, color: it.color });
+        R().text(ctx, it.value, x + 18, 5, { size: 8, color: low && flash ? C.flagRed : it.color });
       });
       R().panel(ctx, 250, 6, 30, 12);                        // [图鉴]
       R().text(ctx, '图鉴', 265, 8, { size: 7, align: 'center' });
@@ -1624,6 +1692,7 @@ canvas{image-rendering:pixelated;image-rendering:crisp-edges;touch-action:none}
       draw(ctx) {
         const R0 = R(), C0 = C(), N = XH.NODES;
         R0.theme(ctx, node.theme);
+        XH.drawTerrain(ctx);                                 // 真实地形底图：河流/雪山/草地/省名
         for (let i = 1; i < N.length; i++) {               // 全程路线虚线：已走金色 / 未走暗灰
           const p = N[i - 1].pos, q = N[i].pos, col = i <= st.nodeIndex ? C0.sparkGold : C0.textDim;
           for (let d = 0; d < 1; d += 0.07) {
@@ -1671,11 +1740,17 @@ canvas{image-rendering:pixelated;image-rendering:crisp-edges;touch-action:none}
       return XH.State.applyDelta(st, d);
     },
 
-    // 行军事件抽取：seed 线性同余伪随机（seed=(seed*48271)%2147483647），按权重抽，minFaith 过滤
+    // 行军事件抽取：seed 线性同余伪随机（seed=(seed*48271)%2147483647），按权重抽；
+    // 条件过滤：min*/max* 字段限定事件抽取的资源区间（max 为开区间，如 maxSupply:30 表示仅 supply<30 时抽取）
     pickEvent(st) {
       if (!Number.isFinite(st.seed) || st.seed <= 0) st.seed = 1;   // 守卫：坏档 seed=NaN/非正数回退常数，防抽取退化
       st.seed = (st.seed * 48271) % 2147483647;
-      const pool = XH.EVENTS.filter(ev => !ev.minFaith || st.faith >= ev.minFaith);
+      const ok = (v, min, max) => (min == null || v >= min) && (max == null || v < max);
+      let pool = XH.EVENTS.filter(ev =>
+        ok(st.faith, ev.minFaith, ev.maxFaith) && ok(st.supply, ev.minSupply, ev.maxSupply) &&
+        ok(st.morale, ev.minMorale, ev.maxMorale) && ok(st.troops, ev.minTroops, ev.maxTroops));
+      const crisis = pool.filter(ev => ev.crisis);
+      if (crisis.length) pool = crisis;                       // 资源告急时必抽危机事件，强化资源存在感
       let r = (st.seed / 2147483647) * pool.reduce((s, e) => s + e.weight, 0);
       for (const ev of pool) { r -= ev.weight; if (r < 0) return ev; }
       return pool[pool.length - 1];
@@ -1736,9 +1811,12 @@ canvas{image-rendering:pixelated;image-rendering:crisp-edges;touch-action:none}
     const R = () => XH.Render, C = () => XH.PALETTE;
     const total = XH.NODES.length;
     const ratio = ((st.notebook || []).length) / total;
+    const avgRes = Math.round(((st.supply || 0) + (st.morale || 0) + (st.faith || 0)) / 3);
+    const resWord = avgRes >= 70 ? '军民同心，粮弹充足'
+      : avgRes >= 40 ? '艰苦奋斗，稳步前行' : '极端困苦，志愈弥坚';
     const word = ratio < 0.5 ? '长征永远在路上'
       : ratio < 0.9 ? '星星之火，正在燎原'
-      : '红军不怕远征难，万水千山只等闲';
+      : avgRes >= 70 ? '红军不怕远征难，万水千山只等闲' : '艰难困苦，玉汝于成';
     const stars = Object.keys(st.mgStars || {}).reduce((s, k) => s + (st.mgStars[k] || 0), 0);
     const mins = Math.floor((st.elapsedMs || 0) / 60000), secs = Math.floor((st.elapsedMs || 0) / 1000) % 60;
     const scene = {
@@ -1755,8 +1833,9 @@ canvas{image-rendering:pixelated;image-rendering:crisp-edges;touch-action:none}
           '玩法星数：' + stars + ' / ' + total * 3,
           '党史笔记：' + ((st.notebook || []).length) + ' / ' + total,
           '出发 8.6 万 → 现在约 ' + XH.HUD.fmtTroops(st.troops || 0),
+          '资源状况：' + resWord,
         ];
-        rows.forEach((ln, i) => R0.text(ctx, ln, 40, 40 + i * 14, { size: 8, color: C0.textMain }));
+        rows.forEach((ln, i) => R0.text(ctx, ln, 40, 38 + i * 13, { size: 8, color: C0.textMain }));
         R0.panel(ctx, 44, 116, 232, 28);
         R0.text(ctx, word, 160, 126, { size: 9, align: 'center', color: C0.sparkGold });
         R0.text(ctx, '点击重新出发', 160, 166, { size: 8, align: 'center', color: C0.textMain });

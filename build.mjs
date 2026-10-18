@@ -5,7 +5,7 @@ import { fileURLToPath } from 'node:url';
 
 const root = path.dirname(fileURLToPath(import.meta.url));
 const ORDER = [
-  'src/data/palette.js', 'src/data/sprites.js', 'src/data/nodes.js',
+  'src/data/palette.js', 'src/data/sprites.js', 'src/data/nodes.js', 'src/data/map-terrain.js',
   'src/data/questions.js', 'src/data/events.js', 'src/data/mg-configs.js',
   'src/core/state.js', 'src/core/save.js', 'src/platform/platform.js',
   'src/engine/render.js', 'src/engine/loop.js', 'src/engine/mechanics.js',
@@ -34,7 +34,7 @@ const html = `<!doctype html>
 html,body{margin:0;height:100%;background:#0b0e13;overflow:hidden}
 #wrap{height:100%;display:flex;align-items:center;justify-content:center}
 canvas{image-rendering:pixelated;image-rendering:crisp-edges;touch-action:none}
-</style></head><body><div id="wrap"><canvas id="game" width="320" height="180"></canvas></div>
+</style></head><body><div id="wrap"><canvas id="game" width="960" height="540"></canvas></div>
 <script>
 ${parts.join('\n')}
 </script></body></html>`;

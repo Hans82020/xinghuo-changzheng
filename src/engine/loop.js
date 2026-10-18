@@ -19,6 +19,7 @@
     },
     start(canvas) {
       this._ctx = canvas.getContext('2d'); this._ctx.imageSmoothingEnabled = false;
+      this._ctx.setTransform(3, 0, 0, 3, 0, 0);   // 3 倍超采样：绘制代码仍用 320×180 逻辑坐标，中文按 960×540 物理分辨率渲染
       XH.Platform.input.bindCanvas(canvas);
       XH.Platform.input.on(e => this.handleInput(e));
       this._running = true; this._last = performance.now();

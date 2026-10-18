@@ -5,9 +5,12 @@
     const R = () => XH.Render, C = () => XH.PALETTE;
     const total = XH.NODES.length;
     const ratio = ((st.notebook || []).length) / total;
+    const avgRes = Math.round(((st.supply || 0) + (st.morale || 0) + (st.faith || 0)) / 3);
+    const resWord = avgRes >= 70 ? '军民同心，粮弹充足'
+      : avgRes >= 40 ? '艰苦奋斗，稳步前行' : '极端困苦，志愈弥坚';
     const word = ratio < 0.5 ? '长征永远在路上'
       : ratio < 0.9 ? '星星之火，正在燎原'
-      : '红军不怕远征难，万水千山只等闲';
+      : avgRes >= 70 ? '红军不怕远征难，万水千山只等闲' : '艰难困苦，玉汝于成';
     const stars = Object.keys(st.mgStars || {}).reduce((s, k) => s + (st.mgStars[k] || 0), 0);
     const mins = Math.floor((st.elapsedMs || 0) / 60000), secs = Math.floor((st.elapsedMs || 0) / 1000) % 60;
     const scene = {
@@ -24,8 +27,9 @@
           '玩法星数：' + stars + ' / ' + total * 3,
           '党史笔记：' + ((st.notebook || []).length) + ' / ' + total,
           '出发 8.6 万 → 现在约 ' + XH.HUD.fmtTroops(st.troops || 0),
+          '资源状况：' + resWord,
         ];
-        rows.forEach((ln, i) => R0.text(ctx, ln, 40, 40 + i * 14, { size: 8, color: C0.textMain }));
+        rows.forEach((ln, i) => R0.text(ctx, ln, 40, 38 + i * 13, { size: 8, color: C0.textMain }));
         R0.panel(ctx, 44, 116, 232, 28);
         R0.text(ctx, word, 160, 126, { size: 9, align: 'center', color: C0.sparkGold });
         R0.text(ctx, '点击重新出发', 160, 166, { size: 8, align: 'center', color: C0.textMain });
