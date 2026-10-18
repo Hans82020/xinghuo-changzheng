@@ -66,6 +66,54 @@
       return scene;
     },
 
+    // 情景影像：节点开场 AI 视频（assets/videos/<id>.mp4），任意输入跳过；无 DOM / 缺文件自动跳过
+    video(node, onDone) {
+      const C = P(), R0 = R();
+      let done = false, el = null;
+      const finish = () => {
+        if (done) return;
+        done = true;
+        if (el) {
+          try { el.pause(); el.removeAttribute('src'); el.load(); } catch (e) {}
+          if (el.parentNode) el.parentNode.removeChild(el);
+          el = null;
+        }
+        popIfTop(scene);
+        if (onDone) onDone();
+      };
+      const scene = {
+        name: 'video', update() {},
+        draw(ctx) {
+          R0.px(ctx, 0, 0, 320, 180, C.inkBlack);
+          R0.text(ctx, node.name + ' · 情景影像', 160, 80, { size: 10, align: 'center', color: C.sparkGold });
+          R0.text(ctx, '点击 / 回车 跳过', 160, 168, { size: 7, align: 'center', color: C.textDim });
+        },
+        onInput(e) {
+          if (e.type === 'tap' || (e.type === 'key' && (e.action === 'confirm' || e.action === 'cancel'))) finish();
+        },
+        enter() {
+          if (typeof document === 'undefined') { finish(); return; }     // 测试/无头环境：直接过
+          try {
+            const cv = document.getElementById('game') || document.querySelector('canvas');
+            const r = cv.getBoundingClientRect();
+            el = document.createElement('video');
+            el.src = 'assets/videos/' + (node.id || '') + '.mp4';
+            Object.assign(el.style, {
+              position: 'fixed', left: r.left + 'px', top: r.top + 'px',
+              width: r.width + 'px', height: r.height + 'px',
+              objectFit: 'contain', background: '#000', zIndex: 9, pointerEvents: 'none',
+            });
+            el.addEventListener('ended', finish);
+            el.addEventListener('error', finish);                        // 缺文件/解码失败自动跳过
+            document.body.appendChild(el);
+            const p = el.play();
+            if (p && p.catch) p.catch(() => { el.muted = true; try { el.play(); } catch (e) {} });  // 自动播放受限时静音重试
+          } catch (e) { finish(); }
+        },
+      };
+      return scene;
+    },
+
     // 对话卡：节点人物对话逐句展示（who 配色固定），tap/confirm 逐句推进，完结 pop 并回调
     dialog(lines, onDone) {
       const C = P(), R0 = R();

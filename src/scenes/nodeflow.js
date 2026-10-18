@@ -1,6 +1,6 @@
 ;(function (XH) {
   // 节点编排器：
-  //   start    → beginNode → story → choice(applyDelta) → quiz(3题) → MinigameScene → finishMg
+  //   start    → beginNode → video(情景影像) → story → choice(applyDelta) → quiz(3题) → MinigameScene → finishMg
   //   finishMg → finishNode → Save → summary → 失败弹 restart / 完成 14 节点弹 report / 否则回 march
   XH.NodeFlow = {
     // 资源变动统一入口：DEBUG_LOCK 开启时把负值归零（调试锁，供 march 事件与节点抉择复用）
@@ -43,11 +43,13 @@
           }));
         }));
       };
-      XH.Loop.push(XH.Overlay.story(node, () => {
-        // 人物对话：story 确认后逐句展示，完结再进抉择（缺省/空对话直接进抉择）
-        const lines = (node.dialog || []).filter(d => d && d.who && d.line);
-        if (lines.length) XH.Loop.push(XH.Overlay.dialog(lines, toChoice));
-        else toChoice();
+      XH.Loop.push(XH.Overlay.video(node, () => {
+        XH.Loop.push(XH.Overlay.story(node, () => {
+          // 人物对话：story 确认后逐句展示，完结再进抉择（缺省/空对话直接进抉择）
+          const lines = (node.dialog || []).filter(d => d && d.who && d.line);
+          if (lines.length) XH.Loop.push(XH.Overlay.dialog(lines, toChoice));
+          else toChoice();
+        }));
       }));
     },
 

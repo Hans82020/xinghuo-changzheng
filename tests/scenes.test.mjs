@@ -1,5 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
+import { existsSync } from 'node:fs';
 import { load, xh } from './load.mjs';
 
 const mockCtx = { fillRect(){}, fillText(){}, clearRect(){}, font:'', fillStyle:'', textAlign:'', textBaseline:'' };
@@ -355,4 +356,27 @@ test('march：HUD 热区 tap——图鉴 push notebook，存档写档', () => {
   assert.equal(Loop.top(), m, '图鉴关闭回到 march');
   m.onInput({ type: 'tap', x: 299, y: 12 });                      // 存档热区 (284,6,30,12)
   assert.ok(Platform.storage.get(Save.KEY), '存档热区触发 Save.write');
+});
+
+test('video：无头环境自动跳过并回调，14 节点视频资产齐全，跳过后进 story', () => {
+  const { Scenes, State, NodeFlow, NODES } = boot();
+  const Loop = xh().Loop;
+  for (const nd of NODES) assert.ok(existsSync(new URL('../assets/videos/' + nd.id + '.mp4', import.meta.url)), '缺少视频资产 ' + nd.id);
+  // 无 DOM 环境：push 后立即 pop 并回调一次
+  Loop.stack.length = 0;
+  const base = { name: 'base', update() {}, draw() {}, onInput() {} };
+  Loop.push(base);
+  let done = 0;
+  Loop.push(XH.Overlay.video(NODES[0], () => done++));
+  assert.equal(done, 1, '无头环境 video 应自动回调');
+  assert.equal(Loop.top(), base, 'video 应自行 pop 回到底层');
+  // 完整流程：NodeFlow.start 后 video 自动跳过，栈顶直接是 story
+  Loop.stack.length = 0;
+  const st = State.create(); st.nodeIndex = 2;
+  Loop.push(Scenes.march(st));
+  NodeFlow.start(st, NODES[2]);
+  const m2 = Loop.stack[0];
+  assert.equal(Loop.stack.length, 2, 'video 自动跳过，栈中只剩 march+story');
+  assert.notEqual(Loop.top(), m2, '栈顶应是 story 而非 march');
+  assert.equal(typeof Loop.top().onInput, 'function', '栈顶应为可交互的 story 弹层');
 });
